@@ -2,6 +2,7 @@ services:
   db:
     image: postgres:17
     container_name: cash-payments-db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: cash
       POSTGRES_USER: cash

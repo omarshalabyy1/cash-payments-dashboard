@@ -2,6 +2,21 @@
 // For each one: select the _Measures table, Table tools > New measure, paste the block (name = expression),
 // then set the format (Measure tools > Format) and the display folder (Model view > Properties) written above it.
 // The rules behind status and is_late are in sql/2_rules.sql; no measure redefines them.
+// 12 measures, no calculated columns, no calculated tables.
+//
+// Measures by page (P1 = Daily cash, P2 = Due and late; # = the visual number in 04-pages.md)
+//   Report Date          P1 #2            P2 #2
+//   Cash In              P1 #6, #10, #11, #12
+//   Payments Confirmed   P1 #7, #10 (tooltip)   P2 #9
+//   Late Payments        P1 #8            P2 #9
+//   Late Rate %          P1 #9            P2 #9
+//   Share of Cash In %   P1 #11, #12 (tooltips)
+//   Still Due                             P2 #5, #8
+//   Never Paid                            P2 #6
+//   Late Amount                           P2 #7, #9
+//   Confirmed Date                        P2 #10
+//   Total Paid                            P2 #10 (Amount); also the base of Cash In, Still Due, Never Paid, Late Amount
+//   Payments             not on a visual; the base of Payments Confirmed
 
 
 // ===== Display folder: Cash =====

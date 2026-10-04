@@ -15,15 +15,18 @@ The report answers three questions for the owner: how much cash came in (by day,
 
 ## Follow the files in order
 
+The step-by-step path is [08-build-checklist.md](08-build-checklist.md): 32 numbered steps that call each file below at the right moment and stop at checks C1 to C8.
+
 | Step | File | What you do |
 |---|---|---|
 | 1 | [01-power-query.md](01-power-query.md) | Connect to PostgreSQL and paste the five queries |
-| 2 | [02-model.md](02-model.md) | Check the relationships, mark the date table, hide and sort columns |
-| 3 | [03-measures.dax](03-measures.dax) | Paste the measures into the `_Measures` table |
+| 2 | [02-model.md](02-model.md) | Create the relationships, mark the date table, hide and sort columns |
+| 3 | [03-measures.dax](03-measures.dax) | Paste the 12 measures into the `_Measures` table |
 | 4 | [05-theme.json](05-theme.json) | View > Themes > Browse for themes, pick this file |
-| 5 | [04-pages.md](04-pages.md) | Build the two pages, visual by visual |
-| 6 | [06-checks.md](06-checks.md) | Compare every card with the expected numbers |
-| 7 | `screenshots/` | Save one image per page: `daily-cash.png` and `due-and-late.png` |
+| 5 | [04-pages.md](04-pages.md) | Build the two pages, 22 visuals, in order |
+| 6 | [07-interactions.md](07-interactions.md) | Set the edit-interactions matrix and the one visual-level filter |
+| 7 | [06-checks.md](06-checks.md) | Compare every card with the expected numbers (C1 to C8) |
+| 8 | `screenshots/` | Save one image per page: `daily-cash.png` and `due-and-late.png` |
 
 Save the report as `powerbi/cash-payments-dashboard.pbix` and commit it with the screenshots.
 

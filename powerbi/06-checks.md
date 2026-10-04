@@ -9,9 +9,20 @@ Run a query from the repo folder, with the warehouse up:
 docker compose exec db psql -U cash -d cash -c "<paste the query here>"
 ```
 
+## C1 · Row counts after Close & Apply
+
+Table view, row count at the bottom left: fact_instalment 296,425; dim_date 1,338; dim_payment_method 5; dim_state 27.
+
+```sql
+select (select count(*) from mart.fact_instalment) as fact_instalment, (select count(*) from mart.dim_date) as dim_date,
+       (select count(*) from mart.dim_payment_method) as dim_payment_method, (select count(*) from mart.dim_state) as dim_state;
+```
+
 ## Page 1 · Daily cash
 
-| Visual | No slicer selected | Date slicer 1 May to 31 May 2018 |
+**C2 · Cards with no slicer selected** and **C3 · cards with the date slicer on 1 May to 31 May 2018:**
+
+| Visual | C2 · No slicer selected | C3 · Date slicer 1 May to 31 May 2018 |
 |---|---|---|
 | Cash in | 14.42M (14,415,391.61) | 1.12M (1,117,998.16) |
 | Payments confirmed | 103,711 | 7,334 |
@@ -29,7 +40,7 @@ from mart.fact_instalment;
 -- for May 2018, add before the semicolon: where cash_date between '2018-05-01' and '2018-05-31'
 ```
 
-**Cash in by payment method** (no slicer; tooltip = share):
+**C4 · Cash in by payment method** (no slicer; tooltip = share):
 
 | Payment method | Cash in | Share |
 |---|---|---|
@@ -45,7 +56,7 @@ from mart.fact_instalment f join mart.dim_payment_method m using (payment_type)
 where f.status = 'Received' group by m.payment_method order by cash_in desc;
 ```
 
-**Cash in by region** (no slicer; tooltip = share):
+**C5 · Cash in by region** (no slicer; tooltip = share):
 
 | Region | Cash in | Share |
 |---|---|---|
@@ -64,6 +75,8 @@ where f.status = 'Received' group by s.region order by cash_in desc;
 
 ## Page 2 · Due and late
 
+**C6 · Cards and the table total, no slicer selected:**
+
 | Visual | No slicer selected |
 |---|---|
 | Still due on instalments | 1.56M (1,556,350.74) |
@@ -79,7 +92,7 @@ select sum(amount) filter (where status = 'Due') as still_due,
 from mart.fact_instalment;
 ```
 
-**Still due by month**, the first four columns:
+**C7 · Still due by month**, the first four columns:
 
 | Month | Still due |
 |---|---|
@@ -93,7 +106,7 @@ select to_char(cash_date, 'YYYY-MM') as year_month, sum(amount) as still_due
 from mart.fact_instalment where status = 'Due' group by 1 order by 1 limit 4;
 ```
 
-**Late payments by method** (matrix):
+**C8 · Late payments by method** (matrix):
 
 | Payment method | Payments confirmed | Late payments | Late rate | Late amount |
 |---|---|---|---|---|

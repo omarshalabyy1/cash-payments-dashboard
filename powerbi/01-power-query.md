@@ -6,13 +6,23 @@ For each one: Home > Get data > Blank query, then Home > Advanced Editor, paste 
 The first time, Power BI asks for credentials: choose **Database**, user `cash`, password `cash`.
 If it asks about encryption, choose to connect without it (the database runs only on your laptop).
 
+| Query | Load | Rows | Why |
+|---|---|---|---|
+| Warehouse | No (Enable load off) | | The connection, written once so every table uses the same server |
+| fact_instalment | Yes | 296,425 | The fact table |
+| dim_date | Yes | 1,338 | The calendar, built in SQL so the notebook and the report share one |
+| dim_payment_method | Yes | 5 | Readable method names and their order |
+| dim_state | Yes | 27 | State names and the region each belongs to |
+
+No column is renamed: the names come from the warehouse, so a query, a measure and the SQL checks all use the same words.
+
 ## Warehouse (staging, do not load)
 
 The connection to the warehouse, written once. Right-click the query and untick **Enable load**, so it does not become a table.
 
 ```m
 let
-    Source = PostgreSQL.Database("localhost:5434", "cash")
+    Source = PostgreSQL.Database("127.0.0.1:5434", "cash")
 in
     Source
 ```

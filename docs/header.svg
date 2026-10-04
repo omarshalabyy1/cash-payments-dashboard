@@ -28,7 +28,7 @@
   <rect x="210" y="180" width="150" height="30" rx="15" fill="#3B82F6" fill-opacity="0.25"/>
   <text x="285" y="200" class="chip" text-anchor="middle">BRL 1.56M still due</text>
   <rect x="370" y="180" width="150" height="30" rx="15" fill="#FFFFFF" fill-opacity="0.08"/>
-  <text x="445" y="200" class="chip" text-anchor="middle">2,301 paid late</text>
+  <text x="445" y="200" class="chip" text-anchor="middle">2,301 confirmed late</text>
 
     <rect x="610.0" y="189.3" width="8" height="6.7" rx="1.5" class="in"/>
   <rect x="621.5" y="178.8" width="8" height="17.2" rx="1.5" class="in"/>

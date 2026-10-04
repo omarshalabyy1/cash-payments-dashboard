@@ -1,35 +1,31 @@
 {
-  "name": "Cash dashboard",
-  "dataColors": ["#2563EB", "#0E1630", "#1D4FD7", "#4A5675", "#8DB0FF", "#16203F", "#AEB8D3", "#E8EFFF"],
+  "name": "Cash payments dashboard",
+  "dataColors": ["#2563EB", "#0E1630", "#8DB0FF", "#4A5675", "#1D4FD7", "#C7D7FE"],
   "background": "#FFFFFF",
   "foreground": "#0E1630",
   "tableAccent": "#2563EB",
   "good": "#2563EB",
-  "neutral": "#AEB8D3",
+  "neutral": "#4A5675",
   "bad": "#C2410C",
+  "maximum": "#2563EB",
+  "center": "#8DB0FF",
+  "minimum": "#FFFFFF",
   "textClasses": {
-    "callout": { "fontSize": 26, "fontFace": "Segoe UI Semibold", "color": "#0E1630" },
-    "title": { "fontSize": 12, "fontFace": "Segoe UI Semibold", "color": "#0E1630" },
-    "header": { "fontSize": 12, "fontFace": "Segoe UI Semibold", "color": "#0E1630" },
-    "label": { "fontSize": 10, "fontFace": "Segoe UI", "color": "#4A5675" }
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#0E1630" },
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 13, "color": "#0E1630" },
+    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#0E1630" },
+    "label": { "fontFace": "Segoe UI", "fontSize": 10, "color": "#4A5675" }
   },
   "visualStyles": {
-    "page": {
-      "*": {
-        "background": [{ "color": { "solid": { "color": "#F4F6FB" } }, "transparency": 0 }]
-      }
-    },
     "*": {
       "*": {
-        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
         "border": [{ "show": true, "color": { "solid": { "color": "#E2E7F1" } }, "radius": 8 }],
         "dropShadow": [{ "show": false }]
       }
     },
-    "card": {
+    "page": {
       "*": {
-        "labels": [{ "color": { "solid": { "color": "#0E1630" } } }],
-        "categoryLabels": [{ "show": true, "color": { "solid": { "color": "#4A5675" } } }]
+        "background": [{ "color": { "solid": { "color": "#F4F6FB" } }, "transparency": 0 }]
       }
     }
   }

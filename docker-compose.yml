@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:17
+    container_name: cash-payments-db
+    environment:
+      POSTGRES_DB: cash
+      POSTGRES_USER: cash
+      POSTGRES_PASSWORD: cash
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

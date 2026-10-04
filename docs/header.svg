@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 240" width="1000" height="240" role="img" aria-label="Daily cash and payments dashboard. 103,886 payments: 76% of the cash in arrived by credit card, and BRL 1.56 million was still due on instalments. Bars show cash by month, received and then still due.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.55" stop-color="#10213A"/>
+      <stop offset="1" stop-color="#0E1630"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
+    .eyebrow { font-size: 13px; font-weight: 600; fill: #60A5FA; letter-spacing: 1.5px; }
+    .title { font-size: 30px; font-weight: 700; fill: #FFFFFF; }
+    .result { font-size: 15px; fill: #CBD5E1; }
+    .chip { font-size: 13px; font-weight: 600; fill: #FFFFFF; }
+    .cap { font-size: 11.5px; fill: #94A3B8; }
+    .in { fill: #E2E8F0; }
+    .due { fill: #3B82F6; }
+  </style>
+
+  <rect width="1000" height="240" rx="22" fill="url(#bg)"/>
+  <text x="50" y="62" class="eyebrow">PROJECT · DAILY CASH DASHBOARD</text>
+  <text x="50" y="104" class="title">Daily cash and payments</text>
+  <text x="50" y="136" class="result">103,886 payments: 76% of the cash in arrived by credit card,</text>
+  <text x="50" y="157" class="result">and BRL 1.56 million was still due on instalments.</text>
+
+  <rect x="50" y="180" width="150" height="30" rx="15" fill="#FFFFFF" fill-opacity="0.08"/>
+  <text x="125" y="200" class="chip" text-anchor="middle">BRL 14.4M received</text>
+  <rect x="210" y="180" width="150" height="30" rx="15" fill="#3B82F6" fill-opacity="0.25"/>
+  <text x="285" y="200" class="chip" text-anchor="middle">BRL 1.56M still due</text>
+  <rect x="370" y="180" width="150" height="30" rx="15" fill="#FFFFFF" fill-opacity="0.08"/>
+  <text x="445" y="200" class="chip" text-anchor="middle">2,301 paid late</text>
+
+    <rect x="610.0" y="189.3" width="8" height="6.7" rx="1.5" class="in"/>
+  <rect x="621.5" y="178.8" width="8" height="17.2" rx="1.5" class="in"/>
+  <rect x="633.0" y="168.5" width="8" height="27.5" rx="1.5" class="in"/>
+  <rect x="644.5" y="166.6" width="8" height="29.4" rx="1.5" class="in"/>
+  <rect x="656.0" y="154.7" width="8" height="41.3" rx="1.5" class="in"/>
+  <rect x="667.5" y="153.8" width="8" height="42.2" rx="1.5" class="in"/>
+  <rect x="679.0" y="147.5" width="8" height="48.5" rx="1.5" class="in"/>
+  <rect x="690.5" y="139.8" width="8" height="56.2" rx="1.5" class="in"/>
+  <rect x="702.0" y="134.0" width="8" height="62.0" rx="1.5" class="in"/>
+  <rect x="713.5" y="127.2" width="8" height="68.8" rx="1.5" class="in"/>
+  <rect x="725.0" y="103.8" width="8" height="92.2" rx="1.5" class="in"/>
+  <rect x="736.5" y="108.8" width="8" height="87.2" rx="1.5" class="in"/>
+  <rect x="748.0" y="96.3" width="8" height="99.7" rx="1.5" class="in"/>
+  <rect x="759.5" y="97.8" width="8" height="98.2" rx="1.5" class="in"/>
+  <rect x="771.0" y="90.8" width="8" height="105.2" rx="1.5" class="in"/>
+  <rect x="782.5" y="89.7" width="8" height="106.3" rx="1.5" class="in"/>
+  <rect x="794.0" y="86.0" width="8" height="110.0" rx="1.5" class="in"/>
+  <rect x="805.5" y="93.5" width="8" height="102.5" rx="1.5" class="in"/>
+  <rect x="817.0" y="91.2" width="8" height="104.8" rx="1.5" class="in"/>
+  <rect x="828.5" y="92.5" width="8" height="103.5" rx="1.5" class="in"/>
+  <rect x="840.0" y="190.7" width="8" height="5.3" rx="1.5" class="in"/>
+  <rect x="840.0" y="146.3" width="8" height="44.4" rx="1.5" class="due"/>
+  <rect x="851.5" y="160.8" width="8" height="35.2" rx="1.5" class="due"/>
+  <rect x="863.0" y="171.1" width="8" height="24.9" rx="1.5" class="due"/>
+  <rect x="874.5" y="178.3" width="8" height="17.7" rx="1.5" class="due"/>
+  <rect x="886.0" y="183.7" width="8" height="12.3" rx="1.5" class="due"/>
+  <rect x="897.5" y="187.7" width="8" height="8.3" rx="1.5" class="due"/>
+  <rect x="909.0" y="190.9" width="8" height="5.1" rx="1.5" class="due"/>
+  <rect x="920.5" y="193.2" width="8" height="2.8" rx="1.5" class="due"/>
+  <rect x="932.0" y="194.4" width="8" height="1.6" rx="1.5" class="due"/>
+  <rect x="943.5" y="195.8" width="8" height="0.2" rx="1.5" class="due"/>
+  <line x1="841.0" y1="70" x2="841.0" y2="196" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="835.0" y="66" class="cap" text-anchor="end">report date</text>
+  <text x="610" y="216" class="cap">Cash by month, Jan 2017 to Jun 2019</text>
+</svg>

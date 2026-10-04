@@ -1,0 +1,76 @@
+// 03 · Measures
+// For each one: select the _Measures table, Table tools > New measure, paste the block (name = expression),
+// then set the format (Measure tools > Format) and the display folder (Model view > Properties) written above it.
+// The rules behind status and is_late are in sql/2_rules.sql; no measure redefines them.
+
+
+// ===== Display folder: Cash =====
+
+// Every payment counted once, however many instalments it has.   Format: #,0
+Payments =
+DISTINCTCOUNT ( fact_instalment[payment_id] )
+
+// All money paid, whatever its status.   Format: #,0.00
+Total Paid =
+SUM ( fact_instalment[amount] )
+
+// Money received on or before the report date.   Format: #,0.00
+Cash In =
+CALCULATE ( [Total Paid], fact_instalment[status] = "Received" )
+
+// Card instalments that fall after the report date.   Format: #,0.00
+Still Due =
+CALCULATE ( [Total Paid], fact_instalment[status] = "Due" )
+
+// Payments that were never confirmed.   Format: #,0.00
+Never Paid =
+CALCULATE ( [Total Paid], fact_instalment[status] = "Never paid" )
+
+// This bar's share of the cash in shown across the bars; the slicers still apply.   Format: 0.0%
+Share of Cash In % =
+VAR _CashIn = [Cash In]
+VAR _AllCashIn =
+    CALCULATE ( [Cash In], ALLSELECTED ( dim_payment_method ), ALLSELECTED ( dim_state ) )
+RETURN
+    DIVIDE ( _CashIn, _AllCashIn )
+
+// Payments confirmed in the period: instalment 1 is counted on the day the payment was confirmed.   Format: #,0
+Payments Confirmed =
+CALCULATE (
+    [Payments],
+    fact_instalment[instalment_no] = 1,
+    fact_instalment[status] = "Received"
+)
+
+
+// ===== Display folder: Late =====
+
+// Confirmed payments that came more than 3 days after the order.   Format: #,0
+Late Payments =
+CALCULATE ( [Payments Confirmed], fact_instalment[is_late] = TRUE () )
+
+// Late payments as a share of the payments confirmed.   Format: 0.0%
+Late Rate % =
+VAR _Late = [Late Payments]
+VAR _Confirmed = [Payments Confirmed]
+RETURN
+    DIVIDE ( _Late, _Confirmed )
+
+// All the money of the late payments, every instalment.   Format: #,0.00
+Late Amount =
+CALCULATE ( [Total Paid], fact_instalment[is_late] = TRUE () )
+
+// The day a payment was confirmed (the day of its first instalment); used in the late payments table.   Format: d mmm yyyy
+Confirmed Date =
+CALCULATE ( MIN ( fact_instalment[cash_date] ), fact_instalment[instalment_no] = 1 )
+
+
+// ===== Display folder: Dates =====
+
+// The last day any payment was confirmed: the same on every page, whatever is selected.   Format: d mmm yyyy
+Report Date =
+CALCULATE (
+    MAX ( fact_instalment[cash_date] ),
+    REMOVEFILTERS (),
+    fact_instalment[status] = "Received"
+)

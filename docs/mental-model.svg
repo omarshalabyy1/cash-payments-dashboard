@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" role="img" aria-label="Where the money goes: 103,886 payments worth BRL 16.0 million split by payment method (credit card BRL 12.5 million, boleto 2.87 million, voucher 379 thousand, debit card 218 thousand) and flow into received (BRL 14.4 million, 90.0%), still due on card instalments (BRL 1.56 million, 9.7%) and never paid (BRL 37 thousand, 0.2%) on the report date, 3 Sep 2018. 2,301 payments were confirmed late, 78% of them boleto.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.55" stop-color="#10213A"/>
+      <stop offset="1" stop-color="#0E1630"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
+    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
+    .sub { font-size: 13.5px; fill: #CBD5E1; }
+    .step { font-size: 16px; font-weight: 700; fill: #FFFFFF; }
+    .label { font-size: 14px; font-weight: 700; fill: #FFFFFF; }
+    .label-due { font-size: 14px; font-weight: 700; fill: #60A5FA; }
+    .desc { font-size: 13px; font-weight: 400; fill: #CBD5E1; }
+    .note { font-size: 12px; fill: #60A5FA; }
+    .late { font-size: 12px; fill: #94A3B8; }
+    .cap { font-size: 12px; fill: #94A3B8; }
+    .flow { fill: #94A3B8; fill-opacity: 0.22; }
+    .due { fill: #3B82F6; fill-opacity: 0.75; }
+    .node { fill: #E2E8F0; }
+    .node-due { fill: #3B82F6; }
+  </style>
+
+  <rect width="1000" height="600" rx="22" fill="url(#bg)"/>
+  <text x="50" y="50" class="title">Where the money goes</text>
+  <text x="50" y="74" class="sub">Every payment, by how it was paid, to where it stands on the report date. Instalments push card money into the months ahead.</text>
+
+    <path class="flow" d="M204 140.0C337.0 140.0 337.0 118.0 470 118.0L470 353.0C337.0 353.0 337.0 375.0 204 375.0Z"/>
+  <path class="flow" d="M204 375.0C337.0 375.0 337.0 383.0 470 383.0L470 436.8C337.0 436.8 337.0 428.8 204 428.8Z"/>
+  <path class="flow" d="M204 428.8C337.0 428.8 337.0 466.8 470 466.8L470 473.9C337.0 473.9 337.0 435.9 204 435.9Z"/>
+  <path class="flow" d="M204 435.9C337.0 435.9 337.0 503.9 470 503.9L470 508.0C337.0 508.0 337.0 440.0 204 440.0Z"/>
+  <path class="flow" d="M484 118.0C622.0 118.0 622.0 118.0 760 118.0L760 323.7C622.0 323.7 622.0 323.7 484 323.7Z"/>
+  <path class="due" d="M484 323.7C622.0 323.7 622.0 432.1 760 432.1L760 461.3C622.0 461.3 622.0 352.8 484 352.8Z"/>
+  <path class="flow" d="M484 352.8C622.0 352.8 622.0 505.3 760 505.3L760 506.5C622.0 506.5 622.0 354.0 484 354.0Z"/>
+  <path class="flow" d="M484 383.0C622.0 383.0 622.0 323.7 760 323.7L760 377.4C622.0 377.4 622.0 436.7 484 436.7Z"/>
+  <path class="flow" d="M484 436.7C622.0 436.7 622.0 506.5 760 506.5L760 507.7C622.0 507.7 622.0 437.9 484 437.9Z"/>
+  <path class="flow" d="M484 466.8C622.0 466.8 622.0 377.4 760 377.4L760 384.1C622.0 384.1 622.0 473.5 484 473.5Z"/>
+  <path class="flow" d="M484 473.5C622.0 473.5 622.0 507.7 760 507.7L760 508.9C622.0 508.9 622.0 474.7 484 474.7Z"/>
+  <path class="flow" d="M484 503.9C622.0 503.9 622.0 384.1 760 384.1L760 388.1C622.0 388.1 622.0 508.0 484 508.0Z"/>
+
+    <rect class="node" x="190" y="140.0" width="14" height="300.0" rx="2"/>
+  <rect class="node" x="470" y="118.0" width="14" height="235.0" rx="2"/>
+  <rect class="node" x="470" y="383.0" width="14" height="53.8" rx="2"/>
+  <rect class="node" x="470" y="466.8" width="14" height="7.1" rx="2"/>
+  <rect class="node" x="470" y="503.9" width="14" height="4.1" rx="2"/>
+  <rect class="node" x="760" y="118.0" width="14" height="270.1" rx="2"/>
+  <rect class="node-due" x="760" y="432.1" width="14" height="29.2" rx="2"/>
+  <rect class="node" x="760" y="505.3" width="14" height="2.5" rx="2"/>
+
+    <text x="176" y="272" class="step" text-anchor="end">All payments</text>
+  <text x="176" y="294" class="desc" text-anchor="end">103,886 payments</text>
+  <text x="176" y="313" class="desc" text-anchor="end">BRL 16.0 million</text>
+  <text x="496" y="224" class="label">Credit card</text>
+  <text x="496" y="242" class="desc">BRL 12.5M</text>
+  <text x="496" y="259" class="note">51,338 of 76,795 in 2 to 24 instalments</text>
+  <text x="496" y="398" class="label">Boleto (bank slip)</text>
+  <text x="496" y="416" class="desc">BRL 2.87M</text>
+  <text x="496" y="433" class="late">9.1% confirmed late</text>
+  <text x="496" y="475" class="label">Voucher <tspan class="desc">BRL 379k</tspan></text>
+  <text x="496" y="511" class="label">Debit card <tspan class="desc">BRL 218k</tspan></text>
+  <text x="786" y="241" class="label">Received</text>
+  <text x="786" y="259" class="desc">BRL 14.4M · 90.0%</text>
+  <text x="786" y="276" class="cap">on or before 3 Sep 2018</text>
+  <text x="786" y="435" class="label-due">Still due</text>
+  <text x="786" y="453" class="desc">BRL 1.56M · 9.7%</text>
+  <text x="786" y="470" class="cap">card instalments up to May 2020</text>
+  <text x="786" y="495" class="label">Never paid</text>
+  <text x="786" y="513" class="desc">BRL 37k · 0.2%</text>
+  <text x="786" y="530" class="cap">payment never confirmed</text>
+
+  <text x="50" y="572" class="cap">Late: 2,301 payments (2.2%) were confirmed more than 3 days after the order, 78% of them boleto. Band heights are to scale.</text>
+</svg>

@@ -56,3 +56,5 @@ Every `customer_state` that appears in customers, with its name and region.
 ## The demo files
 
 `payment_methods.csv` and `regions.csv` are committed. The other three are the Olist files from Kaggle (see Data in the main README); download them into this folder. They are not committed.
+
+The state list in `regions.csv` derives from the [Olist dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (CC BY-NC-SA 4.0); a client's private copy replaces it with their own mapping.

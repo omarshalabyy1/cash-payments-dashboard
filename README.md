@@ -106,6 +106,8 @@ The instalment schedule is a stated assumption (rule 1), so "cash by day" for ca
 - `olist_order_payments_dataset.csv`
 - `olist_customers_dataset.csv`
 
+The state list in [`data/input/regions.csv`](data/input/regions.csv) derives from the [Olist dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (CC BY-NC-SA 4.0); a client's private copy replaces it with their own mapping.
+
 ---
 
 Built by [Omar Shalaby](https://github.com/omarshalabyy1) · PostgreSQL, SQL, Python, Power BI, DAX, Power Query

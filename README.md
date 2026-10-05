@@ -14,7 +14,7 @@
 
 The owner learns how much cash came in only at month end, from a spreadsheet nobody trusts. Card payments arrive in instalments over many months, boleto payments arrive when the customer gets round to paying, and nobody can say on a given day what has come in, what is still owed, or which payments are late.
 
-## The solution
+## 🛠️ The solution
 
 A small warehouse in PostgreSQL that turns every order and payment into one row per instalment, with the cash rules written once in SQL, and a Power BI report on top of it: a daily cash page and a due-and-late page. One command loads it and proves that every total still matches the source.
 
@@ -22,7 +22,7 @@ A small warehouse in PostgreSQL that turns every order and payment into one row 
   <img width="100%" src="docs/how-it-works.svg" alt="How it works: 01 Load, orders, payments and customers; 02 Rules, cash in, still due, late and never paid defined once; 03 Model, a star schema with a date table; 04 Report, a Power BI daily cash page.">
 </p>
 
-### The mental model: where the money goes
+### 🔁 The mental model: where the money goes
 
 Every payment flows from how it was paid to where it stands on the report date. Card instalments are what push money into the months ahead.
 
@@ -30,7 +30,7 @@ Every payment flows from how it was paid to where it stands on the report date. 
   <img width="100%" src="docs/mental-model.svg" alt="Where the money goes: BRL 16.0 million across 103,886 payments, by payment method, into received (BRL 14.4 million), still due on card instalments (BRL 1.56 million) and never paid (BRL 37 thousand).">
 </p>
 
-### The rules, written once
+### 📏 The rules, written once
 
 All four live in [`sql/2_rules.sql`](sql/2_rules.sql). The notebook and every Power BI measure read them; nothing redefines them.
 
@@ -41,7 +41,7 @@ All four live in [`sql/2_rules.sql`](sql/2_rules.sql). The notebook and every Po
 
 The instalments of a payment add up to its value to the cent (the first ones are cut to the cent, the last takes the remainder), so the model can be reconciled exactly.
 
-## The result
+## 📈 The result
 
 **103,886 payments: 76% of the cash in arrived by credit card, and BRL 1.56 million was still due on instalments.**
 
@@ -63,13 +63,13 @@ The instalments of a payment add up to its value to the cent (the first ones are
 
 Every number above is computed in [`analysis/analysis.ipynb`](analysis/analysis.ipynb), saved with its outputs, and checked with SQL in [`powerbi/06-checks.md`](powerbi/06-checks.md).
 
-## The Power BI report
+## 📊 The Power BI report
 
 Two pages on the star schema: **Daily cash** (cash in by day, payment method and region, with payments confirmed and the late rate for any date range) and **Due and late** (instalments still due by month, money never paid, and every late payment listed).
 
 The report is built step by step from [`powerbi/`](powerbi/): every Power Query step, the model, every DAX measure, each visual with its fields, the theme, and the numbers each card must show.
 
-## How it is built
+## 🏗️ How it is built
 
 - **Load** ([`sql/1_load.sql`](sql/1_load.sql), [`load.py`](load.py)): the five input files in [`data/input/`](data/input/README.md) (orders, payments, customers, and the payment-method and region mapping files) are checked for their columns, then go into `raw` tables as they are, with `COPY`. Every client value (names, currency, the late threshold, colours, file names) comes from [`config/client.yaml`](config/client.yaml) through [`config.py`](config.py).
 - **Rules** ([`sql/2_rules.sql`](sql/2_rules.sql)): one row per instalment, with its cash date, amount, status (Received, Due or Never paid) and late flag.
@@ -77,7 +77,7 @@ The report is built step by step from [`powerbi/`](powerbi/): every Power Query 
 - **Check:** `load.py` ends by proving that the model holds all 103,886 source payments and that received + still due + never paid equals the source total to the cent; it stops with an error if not.
 - **Numbers:** [`analysis/analysis.ipynb`](analysis/analysis.ipynb) reads the model with pandas, re-reads the raw payments file without the database for an independent total, and draws the charts.
 
-## Run it
+## ▶️ Run it
 
 You need Docker, Python 3.10 or later, and the three data files (see Data).
 
@@ -92,11 +92,11 @@ python -m nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
 
 `load.py` rebuilds everything from scratch each time and ends with `check passed`. The database listens on `127.0.0.1:5434` (database and user `cash`; the password is in `.env`). `theme.py` writes the Power BI theme from the colours in `config/client.yaml`.
 
-## Limits
+## ⚠️ Limits
 
 The instalment schedule is a stated assumption (rule 1), so "cash by day" for card payments after instalment 1 is modelled, not observed. "Late" only sees the gap between order and payment confirmation; the source has no due dates for individual instalments, so a missed instalment cannot be seen. Amounts are what customers paid, freight included.
 
-## Data
+## 🗂️ Data
 
 [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) on Kaggle (CC BY-NC-SA 4.0): about 100,000 orders placed from 2016 to 2018, with payments by method and number of instalments, and customers by state. This project uses three of its files. Download them from Kaggle and put them in `data/input/` (they are not committed):
 

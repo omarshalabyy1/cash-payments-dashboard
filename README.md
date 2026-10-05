@@ -92,8 +92,6 @@ python -m nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
 
 `load.py` rebuilds everything from scratch each time and ends with `check passed`. The database listens on `127.0.0.1:5434` (database and user `cash`; the password is in `.env`). `theme.py` writes the Power BI theme from the colours in `config/client.yaml`.
 
-New client? See [docs/new-client.md](docs/new-client.md).
-
 ## Limits
 
 The instalment schedule is a stated assumption (rule 1), so "cash by day" for card payments after instalment 1 is modelled, not observed. "Late" only sees the gap between order and payment confirmation; the source has no due dates for individual instalments, so a missed instalment cannot be seen. Amounts are what customers paid, freight included.

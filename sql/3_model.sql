@@ -16,55 +16,18 @@ from generate_series(
     interval '1 day'
 ) as d;
 
-create table mart.dim_payment_method (
-    payment_type   text primary key,
-    payment_method text not null,
-    sort_order     int not null
-);
-insert into mart.dim_payment_method values
-    ('credit_card', 'Credit card',        1),
-    ('boleto',      'Boleto (bank slip)', 2),
-    ('voucher',     'Voucher',            3),
-    ('debit_card',  'Debit card',         4),
-    ('not_defined', 'Not defined',        5);
+-- The payment methods and the states with their regions come from the client's two mapping files.
+create table mart.dim_payment_method as
+select payment_type, payment_method, sort_order from raw.payment_methods;
 
--- One row per customer state, with the region it belongs to.
-create table mart.dim_state (
-    customer_state char(2) primary key,
-    state          text not null,
-    region         text not null
-);
-insert into mart.dim_state values
-    ('AC', 'Acre',                'North'),
-    ('AP', 'Amapá',               'North'),
-    ('AM', 'Amazonas',            'North'),
-    ('PA', 'Pará',                'North'),
-    ('RO', 'Rondônia',            'North'),
-    ('RR', 'Roraima',             'North'),
-    ('TO', 'Tocantins',           'North'),
-    ('AL', 'Alagoas',             'Northeast'),
-    ('BA', 'Bahia',               'Northeast'),
-    ('CE', 'Ceará',               'Northeast'),
-    ('MA', 'Maranhão',            'Northeast'),
-    ('PB', 'Paraíba',             'Northeast'),
-    ('PE', 'Pernambuco',          'Northeast'),
-    ('PI', 'Piauí',               'Northeast'),
-    ('RN', 'Rio Grande do Norte', 'Northeast'),
-    ('SE', 'Sergipe',             'Northeast'),
-    ('DF', 'Distrito Federal',    'Central-West'),
-    ('GO', 'Goiás',               'Central-West'),
-    ('MT', 'Mato Grosso',         'Central-West'),
-    ('MS', 'Mato Grosso do Sul',  'Central-West'),
-    ('ES', 'Espírito Santo',      'Southeast'),
-    ('MG', 'Minas Gerais',        'Southeast'),
-    ('RJ', 'Rio de Janeiro',      'Southeast'),
-    ('SP', 'São Paulo',           'Southeast'),
-    ('PR', 'Paraná',              'South'),
-    ('RS', 'Rio Grande do Sul',   'South'),
-    ('SC', 'Santa Catarina',      'South');
+create table mart.dim_state as
+select customer_state, state, region from raw.regions;
 
--- Keys: a fact row that points at a missing day, method or state fails the load here.
-alter table mart.dim_date add primary key (date);
+-- Keys: a fact row that points at a missing day, method or state fails the load here,
+-- and the error names the code that is missing from the mapping file.
+alter table mart.dim_date           add primary key (date);
+alter table mart.dim_payment_method add primary key (payment_type);
+alter table mart.dim_state          add primary key (customer_state);
 alter table mart.fact_instalment
     add primary key (payment_id, instalment_no),
     add foreign key (payment_type)   references mart.dim_payment_method,

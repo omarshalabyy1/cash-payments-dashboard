@@ -1,0 +1,6 @@
+payment_type,payment_method,sort_order
+credit_card,Credit card,1
+boleto,Boleto (bank slip),2
+voucher,Voucher,3
+debit_card,Debit card,4
+not_defined,Not defined,5

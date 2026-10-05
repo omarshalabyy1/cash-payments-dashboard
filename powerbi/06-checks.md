@@ -1,6 +1,7 @@
 # 06 · Checks
 
 Every number below comes from `analysis/analysis.ipynb` (section 5) and is checked by the SQL query under it.
+They are the demo data's numbers. For a client, run the notebook on their data and copy its section 5 into this file; the example month is `report.check_month` in `config/client.yaml`.
 If a card shows anything else, the build has a mistake; the usual causes are at the bottom.
 
 Run a query from the repo folder, with the warehouse up:

@@ -36,7 +36,7 @@ All four live in [`sql/2_rules.sql`](sql/2_rules.sql). The notebook and every Po
 
 1. **Cash date.** The source records how many instalments a card payment has, but not when each one is paid. So this is an assumption, not data: instalment 1 is counted on the day the payment was confirmed, instalment *k* is counted *k* − 1 months later. Boleto, debit card and voucher are one instalment.
 2. **Report date.** The last day any payment was confirmed: 3 Sep 2018. Instalments on or before it are *received*; later ones are *still due*.
-3. **Late.** A payment confirmed more than 3 days after the order was placed.
+3. **Late.** A payment confirmed more than 3 days after the order was placed (`rules.late_after_days` in [`config/client.yaml`](config/client.yaml)).
 4. **Never paid.** An order whose payment was never confirmed.
 
 The instalments of a payment add up to its value to the cent (the first ones are cut to the cent, the last takes the remainder), so the model can be reconciled exactly.
@@ -71,7 +71,7 @@ The report is built step by step from [`powerbi/`](powerbi/): every Power Query 
 
 ## How it is built
 
-- **Load** ([`sql/1_load.sql`](sql/1_load.sql), [`load.py`](load.py)): the three source files go into `raw` tables as they are, with `COPY`.
+- **Load** ([`sql/1_load.sql`](sql/1_load.sql), [`load.py`](load.py)): the five input files in [`data/input/`](data/input/README.md) (orders, payments, customers, and the payment-method and region mapping files) are checked for their columns, then go into `raw` tables as they are, with `COPY`. Every client value (names, currency, the late threshold, colours, file names) comes from [`config/client.yaml`](config/client.yaml) through [`config.py`](config.py).
 - **Rules** ([`sql/2_rules.sql`](sql/2_rules.sql)): one row per instalment, with its cash date, amount, status (Received, Due or Never paid) and late flag.
 - **Model** ([`sql/3_model.sql`](sql/3_model.sql)): a star schema around `mart.fact_instalment` (296,425 rows) with `dim_date` (every day from the first order to the last instalment), `dim_payment_method` and `dim_state` (state and region). The keys are the natural codes, enforced with primary and foreign keys, so a fact row that points at a missing day, method or state fails the load.
 - **Check:** `load.py` ends by proving that the model holds all 103,886 source payments and that received + still due + never paid equals the source total to the cent; it stops with an error if not.
@@ -82,13 +82,17 @@ The report is built step by step from [`powerbi/`](powerbi/): every Power Query 
 You need Docker, Python 3.10 or later, and the three data files (see Data).
 
 ```bash
+cp .env.example .env
 docker compose up -d
 pip install -r requirements.txt
 python load.py
+python theme.py
 python -m nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
 ```
 
-`load.py` rebuilds everything from scratch each time and ends with `check passed`. The database listens on `localhost:5434` (database, user and password: `cash`).
+`load.py` rebuilds everything from scratch each time and ends with `check passed`. The database listens on `127.0.0.1:5434` (database and user `cash`; the password is in `.env`). `theme.py` writes the Power BI theme from the colours in `config/client.yaml`.
+
+New client? See [docs/new-client.md](docs/new-client.md).
 
 ## Limits
 
@@ -96,7 +100,7 @@ The instalment schedule is a stated assumption (rule 1), so "cash by day" for ca
 
 ## Data
 
-[Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) on Kaggle (CC BY-NC-SA 4.0): about 100,000 orders placed from 2016 to 2018, with payments by method and number of instalments, and customers by state. This project uses three of its files. Download them from Kaggle and put them in `data/raw/`:
+[Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) on Kaggle (CC BY-NC-SA 4.0): about 100,000 orders placed from 2016 to 2018, with payments by method and number of instalments, and customers by state. This project uses three of its files. Download them from Kaggle and put them in `data/input/` (they are not committed):
 
 - `olist_orders_dataset.csv`
 - `olist_order_payments_dataset.csv`

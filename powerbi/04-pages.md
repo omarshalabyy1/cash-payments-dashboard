@@ -1,7 +1,7 @@
 # 04 · Pages
 
 Canvas: 16:9, 1280 × 720 (Format page > Canvas settings). Position and size are set in Format visual > General > Properties: X, Y, width, height.
-Every amount is in BRL. Cards show display units **Millions** with 2 decimals, except where a row says otherwise.
+Every amount is in the client's currency (`client.currency` in `config/client.yaml`). Cards show display units **Millions** with 2 decimals, except where a row says otherwise.
 Rename a field inside a visual by double-clicking it in the Build pane; the names to use are in quotes.
 Build the visuals in the order of the # column. No visual uses the Legend well: each chart has one series.
 Interactions, filters, drill-through and bookmarks are in [07-interactions.md](07-interactions.md).

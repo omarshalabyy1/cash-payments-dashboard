@@ -9,7 +9,7 @@ The report answers three questions for the owner: how much cash came in (by day,
 
 ## Before you start
 
-1. The warehouse is running and loaded: from the repo folder, `docker compose up -d` then `python load.py` (it ends with "check passed").
+1. The warehouse is running and loaded: from the repo folder (the first time: `cp .env.example .env`), `docker compose up -d` then `python load.py` (it ends with "check passed").
 2. Power BI Desktop is installed.
 3. In Power BI Desktop: File > Options and settings > Options > Current file > Data load: untick **Auto date/time** (the model has its own date table).
 

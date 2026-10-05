@@ -4,10 +4,11 @@
 -- The source says how many instalments a card payment has, but not when each one is paid. So the
 -- schedule below is a stated assumption, not data:
 --   1. Cash date: instalment 1 is counted on the day the payment was confirmed (order_approved_at);
---      instalment k is counted k - 1 months later. Boleto, debit card and voucher are one instalment.
+--      instalment k is counted k - 1 months later. A payment in one instalment lands on that first day.
 --   2. Report date: the last day any payment was confirmed. Instalments on or before it are Received;
 --      later ones are Due.
---   3. Late: a payment confirmed more than 3 days after the order was placed.
+--   3. Late: a payment confirmed more than rules.late_after_days (config/client.yaml) days after the order
+--      was placed. load.py passes the number in as the setting client.late_after_days.
 --   4. Never paid: an order whose payment was never confirmed. It has no cash date.
 -- The instalments of a payment add up to its value to the cent: the first N - 1 are cut to the cent,
 -- the last one takes the remainder.
@@ -21,12 +22,13 @@ with payment as (
         p.order_id || '-' || p.payment_sequential as payment_id,
         p.order_id,
         p.payment_type,
-        greatest(p.payment_installments, 1)       as instalments,   -- 2 rows say 0; a payment is at least 1
+        greatest(p.payment_installments, 1)       as instalments,   -- 0 is read as 1: a payment is at least one instalment
         p.payment_value,
         c.customer_state,
         o.order_purchase_timestamp::date          as order_date,
         o.order_approved_at,
-        o.order_approved_at > o.order_purchase_timestamp + interval '3 days' as confirmed_late
+        o.order_approved_at > o.order_purchase_timestamp
+            + make_interval(days => current_setting('client.late_after_days')::int) as confirmed_late
     from raw.order_payments p
     join raw.orders o    on o.order_id = p.order_id
     join raw.customers c on c.customer_id = o.customer_id

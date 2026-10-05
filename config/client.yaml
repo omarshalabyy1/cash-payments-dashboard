@@ -1,0 +1,34 @@
+# Everything a client changes, except secrets (those go in .env).
+# Read only through config.py (load_config). A key exists here only if something reads it.
+
+client:
+  name: Sample online store          # notebook and chart titles
+  currency: BRL                      # the label printed with every amount
+  decimals: 2                        # decimals on amounts
+
+warehouse:                           # the password is DB_PASSWORD in .env
+  host: 127.0.0.1
+  port: 5434                         # if you change it, change the ports line in docker-compose.yml too
+  database: cash
+  user: cash
+
+inputs:                              # file names in data/input/ (columns: data/input/README.md)
+  orders: olist_orders_dataset.csv
+  payments: olist_order_payments_dataset.csv
+  customers: olist_customers_dataset.csv
+  payment_methods: payment_methods.csv
+  regions: regions.csv
+
+rules:
+  late_after_days: 3                 # a payment confirmed more than this many days after its order is late
+
+report:
+  title: Daily cash and payments     # the Power BI theme name
+  check_month: "2018-05"             # the month powerbi/06-checks.md uses to test the date slicer
+  colours:                           # the Power BI theme (python theme.py) and the notebook charts
+    data: ["#2563EB", "#0E1630", "#8DB0FF", "#4A5675", "#1D4FD7", "#C7D7FE"]   # 1st = main series, 3rd = second series
+    text: "#0E1630"
+    muted: "#4A5675"
+    page: "#F4F6FB"
+    line: "#E2E7F1"
+    danger: "#C2410C"

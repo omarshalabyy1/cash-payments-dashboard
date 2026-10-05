@@ -1,3 +1,6 @@
-data/raw/*.csv
+.env
+data/input/*.csv
+!data/input/payment_methods.csv
+!data/input/regions.csv
 .ipynb_checkpoints/
 __pycache__/

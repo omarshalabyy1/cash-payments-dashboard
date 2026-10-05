@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: cash
       POSTGRES_USER: cash
-      POSTGRES_PASSWORD: cash
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "127.0.0.1:5434:5432"
     volumes:

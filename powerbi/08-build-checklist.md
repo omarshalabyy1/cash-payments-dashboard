@@ -4,13 +4,13 @@ From opening Power BI Desktop to the last screenshot. Tick each step; stop at a 
 
 ## Start
 
-1. In the repo folder: `docker compose up -d`, then `python load.py`. It must end with `check passed`.
+1. In the repo folder (the first time: `cp .env.example .env`): `docker compose up -d`, then `python load.py`. It must end with `check passed`.
 2. Open Power BI Desktop > Blank report. File > Save as `powerbi/cash-payments-dashboard.pbix`.
 3. File > Options and settings > Options > Current file > Data load: untick **Auto date/time**. In the same window, Relationships: untick **Autodetect new relationships after data is loaded**. OK.
 
 ## Power Query ([01-power-query.md](01-power-query.md))
 
-4. Home > Get data > Blank query > Advanced Editor: paste `Warehouse`, Done, rename it `Warehouse`. Credentials: Database, user `cash`, password `cash`. Right-click > untick **Enable load**.
+4. Home > Get data > Blank query > Advanced Editor: paste `Warehouse`, Done, rename it `Warehouse`. Credentials: Database, user `warehouse.user` from `config/client.yaml`, password `DB_PASSWORD` from `.env` (demo: `cash`, `cash`). Right-click > untick **Enable load**.
 5. Repeat with `fact_instalment`, `dim_date`, `dim_payment_method`, `dim_state` (Blank query, paste, rename).
 6. Home > Close & Apply.
 7. **Check C1:** row counts 296,425 / 1,338 / 5 / 27.
@@ -31,7 +31,7 @@ From opening Power BI Desktop to the last screenshot. Tick each step; stop at a 
 
 ## Theme ([05-theme.json](05-theme.json))
 
-16. View > Themes > **Browse for themes** > pick `powerbi/05-theme.json`. The page turns soft grey, visuals white with a thin border.
+16. In the repo folder run `python theme.py` (writes the colours from `config/client.yaml`). Then View > Themes > **Browse for themes** > pick `powerbi/05-theme.json`. The page turns soft grey, visuals white with a thin border.
 
 ## Page 1 · Daily cash ([04-pages.md](04-pages.md))
 
@@ -39,7 +39,7 @@ From opening Power BI Desktop to the last screenshot. Tick each step; stop at a 
 18. Build visuals #1 to #12 in order, with the position, size, fields and settings in the table.
 19. **Check C2:** the four cards and the report date with no slicer selected.
 20. **Check C4** (hover the method bars) and **C5** (hover the region bars).
-21. Set the Date slicer to 1 May 2018 to 31 May 2018. **Check C3**. Then clear the slicer (eraser icon).
+21. Set the Date slicer to the first and last day of the check month (`report.check_month`; demo: 1 May 2018 to 31 May 2018). **Check C3**. Then clear the slicer (eraser icon).
 22. Set the interactions for page 1 ([07-interactions.md](07-interactions.md)).
 
 ## Page 2 · Due and late

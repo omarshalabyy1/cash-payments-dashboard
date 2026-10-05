@@ -60,7 +60,7 @@ CALCULATE (
 
 // ===== Display folder: Late =====
 
-// Confirmed payments that came more than 3 days after the order.   Format: #,0
+// Confirmed payments that came more than rules.late_after_days (config/client.yaml) after the order.   Format: #,0
 Late Payments =
 CALCULATE ( [Payments Confirmed], fact_instalment[is_late] = TRUE () )
 

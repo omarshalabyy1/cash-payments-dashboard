@@ -3,6 +3,10 @@
 </p>
 
 <p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1200&color=2DD4BF&center=true&vCenter=true&width=760&lines=Where+the+money+goes%2C+every+day;103%2C886+payments%2C+matched+to+the+cent;BRL+1.56M+still+due+on+instalments" alt="Where the money goes, every day">
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/PostgreSQL-17-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL 17">
   <img src="https://img.shields.io/badge/SQL-Star_schema-0E1630?style=for-the-badge" alt="SQL star schema">
   <img src="https://img.shields.io/badge/Power_BI-DAX_%26_Power_Query-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" alt="Power BI, DAX and Power Query">
@@ -43,6 +47,10 @@ The instalments of a payment add up to its value to the cent (the first ones are
 
 ## 📈 The result
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/221352987-68da234d-4d62-4e9d-9d7f-098dc657c2dc.gif" width="100" alt="Moving chart">
+</p>
+
 **103,886 payments: 76% of the cash in arrived by credit card, and BRL 1.56 million was still due on instalments.**
 
 | Question | Answer |
@@ -79,6 +87,10 @@ The report is built step by step from [`powerbi/`](powerbi/): every Power Query 
 
 ## ▶️ Run it
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212284087-bbe7e430-757e-4901-90bf-4cd2ce3e1852.gif" width="100" alt="Code">
+</p>
+
 You need Docker, Python 3.10 or later, and the three data files (see Data).
 
 ```bash
@@ -109,3 +121,7 @@ The state list in [`data/input/regions.csv`](data/input/regions.csv) derives fro
 ---
 
 Built by [Omar Shalaby](https://github.com/omarshalabyy1) · PostgreSQL, SQL, Python, Power BI, DAX, Power Query
+
+<p align="center">
+  <img width="100%" src="docs/footer.svg" alt="Know where the money is, every day.">
+</p>

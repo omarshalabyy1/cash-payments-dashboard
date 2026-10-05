@@ -5,6 +5,14 @@
       <stop offset="0.55" stop-color="#10213A"/>
       <stop offset="1" stop-color="#0E1630"/>
     </linearGradient>
+      <radialGradient id="jrGlowA" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7C3AED" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="jrGlowB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#14B8A6" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#14B8A6" stop-opacity="0"/>
+    </radialGradient>
   </defs>
   <style>
     text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
@@ -15,9 +23,16 @@
     .cap { font-size: 11.5px; fill: #94A3B8; }
     .in { fill: #E2E8F0; }
     .due { fill: #3B82F6; }
+      .wave { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 2 10; animation: flow 6s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -120; } }
   </style>
 
   <rect width="1000" height="240" rx="22" fill="url(#bg)"/>
+  <circle cx="880" cy="60" r="190" fill="url(#jrGlowA)"/>
+  <circle cx="160" cy="220" r="170" fill="url(#jrGlowB)"/>
+  <path class="wave" stroke="#2DD4BF" stroke-opacity="0.5" d="M24 229 C 200 224, 330 233, 500 229 S 800 225, 976 229"/>
+  <path class="wave" stroke="#A78BFA" stroke-opacity="0.4" style="animation-duration:9s" d="M40 235 C 220 231, 360 238, 520 235 S 820 232, 960 235"/>
+
   <text x="50" y="62" class="eyebrow">PROJECT · DAILY CASH DASHBOARD</text>
   <text x="50" y="104" class="title">Daily cash and payments</text>
   <text x="50" y="136" class="result">103,886 payments: 76% of the cash in arrived by credit card,</text>

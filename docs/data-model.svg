@@ -28,10 +28,10 @@
   <text x="360" y="254.5" class="key" fill="#CBD5E1" text-anchor="end">*</text><text x="288" y="162.5" class="key" fill="#CBD5E1" text-anchor="start">1</text>
   <path d="M370 282.5 C325.0 282.5 325.0 327.5 280 327.5" class="edge" stroke="#94A3B8"/>
   <text x="360" y="277.5" class="key" fill="#CBD5E1" text-anchor="end">*</text><text x="288" y="322.5" class="key" fill="#CBD5E1" text-anchor="start">1</text>
-  <path d="M630 305.5 C675.0 305.5 675.0 307.5 720 307.5" class="edge" stroke="#94A3B8" stroke-dasharray="4 4"/>
+  <path d="M630 305.5 C675.0 305.5 675.0 301.0 720 301.0" class="edge" stroke="#94A3B8" stroke-dasharray="4 4"/>
   <text x="640" y="300.5" class="key" fill="#CBD5E1" text-anchor="start">*</text>
-  <path d="M630 328.5 C675.0 328.5 675.0 307.5 720 307.5" class="edge" stroke="#94A3B8"/>
-  <text x="640" y="323.5" class="key" fill="#CBD5E1" text-anchor="start">*</text><text x="712" y="302.5" class="key" fill="#CBD5E1" text-anchor="end">1</text>
+  <path d="M630 328.5 C675.0 328.5 675.0 314.0 720 314.0" class="edge" stroke="#94A3B8"/>
+  <text x="640" y="323.5" class="key" fill="#CBD5E1" text-anchor="start">*</text><text x="712" y="327.0" class="key" fill="#CBD5E1" text-anchor="end">1</text>
   <rect x="370" y="110" width="260" height="307" rx="10" fill="#13233D" stroke="#2563EB" stroke-width="1.5"/>
   <path d="M370 120 a10 10 0 0 1 10 -10 h240 a10 10 0 0 1 10 10 v36 h-260 Z" fill="#2563EB"/>
   <text x="382" y="130" class="name" font-weight="700" style="fill:#FFFFFF">fact_instalment</text><text x="382" y="147" class="count" style="fill:#FFFFFF">296,425 rows</text>

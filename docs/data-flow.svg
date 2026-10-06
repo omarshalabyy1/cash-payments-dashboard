@@ -53,17 +53,17 @@
   <rect x="215" y="334" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="355" class="name">payment_methods</text><text x="377" y="355" class="count" text-anchor="end">5</text>
   <rect x="215" y="380" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="401" class="name">regions</text><text x="377" y="401" class="count" text-anchor="end">27</text>
   <rect x="470" y="150" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="171" class="name">fact_instalment</text><text x="662" y="171" class="count" text-anchor="end">296,425</text>
-  <rect x="470" y="242" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="263" class="name">dim_date</text><text x="662" y="263" class="count" text-anchor="end">1,338</text>
+  <rect x="470" y="288" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="309" class="name">dim_date</text><text x="662" y="309" class="count" text-anchor="end">1,338</text>
   <rect x="470" y="334" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="355" class="name">dim_payment_method</text><text x="662" y="355" class="count" text-anchor="end">5</text>
   <rect x="470" y="380" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="401" class="name">dim_state</text><text x="662" y="401" class="count" text-anchor="end">27</text>
   <line x1="170" y1="166.0" x2="468" y2="166.0" class="edge" marker-end="url(#arrow)"/>
   <text x="300" y="184.0" class="where" text-anchor="middle">late_after_days, via load.py</text>
-  <path d="M385 212.0 C427 212.0 427 166.0 468 166.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 258.0 C427 258.0 427 166.0 468 166.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 304.0 C427 304.0 427 166.0 468 166.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 350.0 C427 350.0 427 350.0 468 350.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 396.0 C427 396.0 427 396.0 468 396.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M670 166.0 C690 166.0 690 258.0 672 258.0" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <path d="M385 212 L494 212 Q500 212 500 206 L500 183" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 258 L534 258 Q540 258 540 252 L540 183" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 304 L424 304 Q430 304 430 298 L430 279 Q430 273 436 273 L574 273 Q580 273 580 267 L580 183" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 350 L469 350" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 396 L469 396" class="edge" marker-end="url(#arrow)"/>
+  <path d="M670 166 L686 166 Q692 166 692 172 L692 298 Q692 304 686 304 L671 304" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
   <path d="M712 150 H724 V412 H712" class="edge" stroke="#14B8A6"/>
   <line x1="724" y1="281.0" x2="830" y2="281.0" class="edge" stroke="#22C55E" marker-end="url(#arrow)"/>
   <rect x="832" y="222.0" width="138" height="118" rx="12" fill="#13233D" stroke="#22C55E" stroke-opacity="0.7"/>

@@ -79,6 +79,14 @@ The report is built step by step from [`powerbi/`](powerbi/): every Power Query 
 
 ## 🏗️ How it is built
 
+Every table, the tables it is built from, and its row count after one run:
+
+![Data flow, table by table](docs/data-flow.svg)
+
+The star schema the report reads:
+
+![The star schema](docs/data-model.svg)
+
 - **Load** ([`sql/1_load.sql`](sql/1_load.sql), [`load.py`](load.py)): the five input files in [`data/input/`](data/input/README.md) (orders, payments, customers, and the payment-method and region mapping files) are checked for their columns, then go into `raw` tables as they are, with `COPY`. Every client value (names, currency, the late threshold, colours, file names) comes from [`config/client.yaml`](config/client.yaml) through [`config.py`](config.py).
 - **Rules** ([`sql/2_rules.sql`](sql/2_rules.sql)): one row per instalment, with its cash date, amount, status (Received, Due or Never paid) and late flag.
 - **Model** ([`sql/3_model.sql`](sql/3_model.sql)): a star schema around `mart.fact_instalment` (296,425 rows) with `dim_date` (every day from the first order to the last instalment), `dim_payment_method` and `dim_state` (state and region). The keys are the natural codes, enforced with primary and foreign keys, so a fact row that points at a missing day, method or state fails the load.

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 494" width="1000" height="494" role="img" aria-label="Data flow, table by table: 5 input files load into 5 raw tables (orders 99,441, order_payments 103,886, customers 99,441, payment_methods 5, regions 27 rows). The cash rules turn every payment into one row per instalment, fact_instalment (296,425 rows), using late_after_days from config/client.yaml. dim_date (1,338 days) runs from the first order to the last instalment, dim_payment_method (5) and dim_state (27) come from the two mapping files. load.py then checks that the fact holds all 103,886 payments and that the money adds up to BRL 16,008,872.12. Power BI reads the star schema into two pages.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.55" stop-color="#10213A"/>
+      <stop offset="1" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#64748B"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
+    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
+    .sub { font-size: 13.5px; fill: #CBD5E1; }
+    .layer { font-size: 14px; font-weight: 700; fill: #0B1220; }
+    .where { font-size: 12px; fill: #94A3B8; }
+    .name { font-size: 13px; fill: #F1F5F9; }
+    .count { font-size: 11.5px; fill: #94A3B8; }
+    .col { font-size: 12.5px; fill: #E2E8F0; }
+    .key { font-size: 11px; font-weight: 700; }
+    .edge { fill: none; stroke: #64748B; stroke-width: 1.4; }
+  </style>
+  <rect width="1000" height="494" rx="22" fill="url(#bg)"/>
+  <text x="40" y="50" class="title">Data flow, table by table</text>
+  <text x="40" y="74" class="sub">Every table in the warehouse and the tables it is built from. load.py fills raw, then sql/2_rules.sql and sql/3_model.sql build the rest.</text>
+  <rect x="30" y="96" width="140" height="26" rx="13" fill="#94A3B8"/><text x="100.0" y="114" class="layer" text-anchor="middle">Input files</text>
+  <text x="100.0" y="138" class="where" text-anchor="middle">data/input, config</text>
+  <rect x="215" y="96" width="170" height="26" rx="13" fill="#3B82F6"/><text x="300.0" y="114" class="layer" text-anchor="middle">1  Raw</text>
+  <text x="300.0" y="138" class="where" text-anchor="middle">schema raw, tables</text>
+  <rect x="470" y="96" width="200" height="26" rx="13" fill="#14B8A6"/><text x="570.0" y="114" class="layer" text-anchor="middle">2  Star schema</text>
+  <text x="570.0" y="138" class="where" text-anchor="middle">schema mart, tables</text>
+  <rect x="825" y="96" width="145" height="26" rx="13" fill="#22C55E"/><text x="897.5" y="114" class="layer" text-anchor="middle">3  Power BI</text>
+  <text x="897.5" y="138" class="where" text-anchor="middle">reads schema mart</text>
+  <rect x="30" y="150" width="140" height="32" rx="7" fill="#13233D" stroke="#94A3B8" stroke-opacity="0.8"/><text x="40" y="171" class="name">config/client.yaml</text>
+  <rect x="30" y="196" width="140" height="216" rx="10" fill="#13233D" stroke="#94A3B8" stroke-opacity="0.7"/>
+  <text x="44" y="226" class="name" font-weight="700">5 CSV files</text>
+  <text x="44" y="246" class="count" style="fill:#CBD5E1;font-size:12.5px"></text>
+  <text x="44" y="266" class="count" style="fill:#CBD5E1;font-size:12.5px">3 store exports:</text>
+  <text x="44" y="286" class="count" style="fill:#CBD5E1;font-size:12.5px">orders, payments,</text>
+  <text x="44" y="306" class="count" style="fill:#CBD5E1;font-size:12.5px">customers</text>
+  <text x="44" y="326" class="count" style="fill:#CBD5E1;font-size:12.5px"></text>
+  <text x="44" y="346" class="count" style="fill:#CBD5E1;font-size:12.5px">+ payment_methods.csv</text>
+  <text x="44" y="366" class="count" style="fill:#CBD5E1;font-size:12.5px">+ regions.csv</text>
+  <line x1="170" y1="212.0" x2="213" y2="212.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="258.0" x2="213" y2="258.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="304.0" x2="213" y2="304.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="350.0" x2="213" y2="350.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="396.0" x2="213" y2="396.0" class="edge" marker-end="url(#arrow)"/>
+  <rect x="215" y="196" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="217" class="name">orders</text><text x="377" y="217" class="count" text-anchor="end">99,441</text>
+  <rect x="215" y="242" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="263" class="name">order_payments</text><text x="377" y="263" class="count" text-anchor="end">103,886</text>
+  <rect x="215" y="288" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="309" class="name">customers</text><text x="377" y="309" class="count" text-anchor="end">99,441</text>
+  <rect x="215" y="334" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="355" class="name">payment_methods</text><text x="377" y="355" class="count" text-anchor="end">5</text>
+  <rect x="215" y="380" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="401" class="name">regions</text><text x="377" y="401" class="count" text-anchor="end">27</text>
+  <rect x="470" y="150" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="171" class="name">fact_instalment</text><text x="662" y="171" class="count" text-anchor="end">296,425</text>
+  <rect x="470" y="242" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="263" class="name">dim_date</text><text x="662" y="263" class="count" text-anchor="end">1,338</text>
+  <rect x="470" y="334" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="355" class="name">dim_payment_method</text><text x="662" y="355" class="count" text-anchor="end">5</text>
+  <rect x="470" y="380" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="401" class="name">dim_state</text><text x="662" y="401" class="count" text-anchor="end">27</text>
+  <line x1="170" y1="166.0" x2="468" y2="166.0" class="edge" marker-end="url(#arrow)"/>
+  <text x="300" y="184.0" class="where" text-anchor="middle">late_after_days, via load.py</text>
+  <path d="M385 212.0 C427 212.0 427 166.0 468 166.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 258.0 C427 258.0 427 166.0 468 166.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 304.0 C427 304.0 427 166.0 468 166.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 350.0 C427 350.0 427 350.0 468 350.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 396.0 C427 396.0 427 396.0 468 396.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M670 166.0 C690 166.0 690 258.0 672 258.0" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <path d="M712 150 H724 V412 H712" class="edge" stroke="#14B8A6"/>
+  <line x1="724" y1="281.0" x2="830" y2="281.0" class="edge" stroke="#22C55E" marker-end="url(#arrow)"/>
+  <rect x="832" y="222.0" width="138" height="118" rx="12" fill="#13233D" stroke="#22C55E" stroke-opacity="0.7"/>
+  <rect x="843" y="238.0" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="259.0" class="name" text-anchor="middle">Daily cash</text>
+  <rect x="843" y="292.0" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="313.0" class="name" text-anchor="middle">Due and late</text>
+  <text x="40" y="446" class="where">dashed: dim_date runs from the first order_date to the last cash_date in fact_instalment.</text>
+  <text x="40" y="466" class="where">load.py check: fact_instalment holds all 103,886 payments of order_payments, and received + due + never paid = BRL 16,008,872.12.</text>
+</svg>

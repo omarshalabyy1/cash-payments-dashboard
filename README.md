@@ -110,7 +110,7 @@ python theme.py
 python -m nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
 ```
 
-`load.py` rebuilds everything from scratch each time and ends with `check passed`. The database listens on `127.0.0.1:5434` (database and user `cash`; the password is in `.env`). `theme.py` writes the Power BI theme from the colours in `config/client.yaml`.
+`load.py` rebuilds everything from scratch each time and ends with `check passed`. The database listens on port 5434 (database and user `cash`; the password is in `.env`). `theme.py` writes the Power BI theme from the colours in `config/client.yaml`.
 
 ## ⚠️ Limits
 

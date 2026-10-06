@@ -3,7 +3,7 @@
 Five queries: one staging query that holds the connection, and four that load the star schema.
 For each one: Home > Get data > Blank query, then Home > Advanced Editor, paste the code, Done, and rename the query (right-click > Rename) to the name in the heading.
 
-The server, database and user are the `warehouse` values in `config/client.yaml`; the code below has the demo values (`127.0.0.1:5434`, `cash`). For a client, change them in the Warehouse query only.
+The server, database and user are the `warehouse` values in `config/client.yaml`; the code below has the demo values (port 5434, `cash`). For a client, change them in the Warehouse query only.
 The first time, Power BI asks for credentials: choose **Database**, user = `warehouse.user`, password = `DB_PASSWORD` in `.env` (demo: `cash` and `cash`).
 If it asks about encryption, choose to connect without it (the database runs only on your laptop).
 

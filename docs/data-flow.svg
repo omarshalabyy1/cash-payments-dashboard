@@ -40,7 +40,7 @@
   <text x="44" y="286" class="count" style="fill:#CBD5E1;font-size:12.5px">orders, payments,</text>
   <text x="44" y="306" class="count" style="fill:#CBD5E1;font-size:12.5px">customers</text>
   <text x="44" y="326" class="count" style="fill:#CBD5E1;font-size:12.5px"></text>
-  <text x="44" y="346" class="count" style="fill:#CBD5E1;font-size:12.5px">+ payment_methods.csv</text>
+  <text x="44" y="346" class="count" style="fill:#CBD5E1;font-size:11px">+ payment_methods.csv</text>
   <text x="44" y="366" class="count" style="fill:#CBD5E1;font-size:12.5px">+ regions.csv</text>
   <line x1="170" y1="212.0" x2="213" y2="212.0" class="edge" marker-end="url(#arrow)"/>
   <line x1="170" y1="258.0" x2="213" y2="258.0" class="edge" marker-end="url(#arrow)"/>

@@ -14,6 +14,8 @@
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
+> 📖 **New to data?** [The project explained, from zero](docs/explained.md): every word, every number and the interview questions, in plain words.
+
 ## The problem
 
 The owner learns how much cash came in only at month end, from a spreadsheet nobody trusts. Card payments arrive in instalments over many months, boleto payments arrive when the customer gets round to paying, and nobody can say on a given day what has come in, what is still owed, or which payments are late.
@@ -99,7 +101,7 @@ The star schema the report reads:
   <img src="https://user-images.githubusercontent.com/74038190/212284087-bbe7e430-757e-4901-90bf-4cd2ce3e1852.gif" width="100" alt="Code">
 </p>
 
-You need Docker, Python 3.10 or later, and the three data files (see Data).
+You need Docker, Python 3.10 or later, and the three shop files from Kaggle (see Data); the two mapping files are already in `data/input/`.
 
 ```bash
 cp .env.example .env

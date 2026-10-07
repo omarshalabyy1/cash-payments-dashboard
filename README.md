@@ -101,7 +101,7 @@ The star schema the report reads:
   <img src="https://user-images.githubusercontent.com/74038190/212284087-bbe7e430-757e-4901-90bf-4cd2ce3e1852.gif" width="100" alt="Code">
 </p>
 
-You need Docker, Python 3.10 or later, and the three shop files from Kaggle (see Data); the two mapping files are already in `data/input/`.
+You need Docker, Python 3.10 or later, and the three shop files (see Data); the two mapping files are already in `data/input/`.
 
 ```bash
 cp .env.example .env

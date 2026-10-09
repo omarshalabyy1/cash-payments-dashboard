@@ -1,74 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 494" width="1000" height="494" role="img" aria-label="Data flow, table by table: 5 input files load into 5 raw tables (orders 99,441, order_payments 103,886, customers 99,441, payment_methods 5, regions 27 rows). The cash rules turn every payment into one row per instalment, fact_instalment (296,425 rows), using late_after_days from config/client.yaml. dim_date (1,338 days) runs from the first order to the last instalment, dim_payment_method (5) and dim_state (27) come from the two mapping files. load.py then checks that the fact holds all 103,886 payments and that the money adds up to BRL 16,008,872.12. Power BI reads the star schema into two pages.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 590" width="1000" height="590" role="img" aria-label="Data flow, table by table, left to right through six layers: 5 input files load into 5 Bronze tables as text (orders 99,441, order_payments 103,886, customers 99,441, payment_methods 5, regions 27 rows; 0 refused to bronze.quarantine; ops.load_log records 5 rows per load). Silver types and keys the same rows. Gold turns every payment into one row per instalment, gold.instalment (296,425 rows), with late_after_days from config/client.yaml. Semantic builds fact_instalment (296,425) from Gold, dim_date (1,827 days, 2016 to 2020) from the calendar setting, and dim_payment_method (5) and dim_state (27) from Silver. Analytical has cash_by_month (44 months), cash_by_method and cash_in_by_region. Reporting: the notebook reads Semantic and Analytical, Power BI imports the four Semantic tables into two pages.">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0B1220"/>
-      <stop offset="0.55" stop-color="#10213A"/>
-      <stop offset="1" stop-color="#1E1B4B"/>
-    </linearGradient>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M0 0 L10 5 L0 10 Z" fill="#64748B"/>
     </marker>
   </defs>
   <style>
     text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
-    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
-    .sub { font-size: 13.5px; fill: #CBD5E1; }
-    .layer { font-size: 14px; font-weight: 700; fill: #0B1220; }
-    .where { font-size: 12px; fill: #94A3B8; }
-    .name { font-size: 13px; fill: #F1F5F9; }
-    .count { font-size: 11.5px; fill: #94A3B8; }
-    .col { font-size: 12.5px; fill: #E2E8F0; }
-    .key { font-size: 11px; font-weight: 700; }
-    .edge { fill: none; stroke: #64748B; stroke-width: 1.4; }
+    .title { font-size: 21px; font-weight: 700; fill: #0E1630; }
+    .sub { font-size: 13.5px; fill: #475569; }
+    .layer { font-size: 13px; font-weight: 700; fill: #0B1220; }
+    .where { font-size: 11.5px; fill: #506078; }
+    .name { font-size: 12.5px; fill: #0E1630; }
+    .count { font-size: 11px; fill: #506078; }
+    .edge { fill: none; stroke: #64748B; stroke-width: 1.3; }
   </style>
-  <rect width="1000" height="494" rx="22" fill="url(#bg)"/>
+  <rect x="1" y="1" width="998" height="588" rx="22" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <text x="40" y="50" class="title">Data flow, table by table</text>
-  <text x="40" y="74" class="sub">Every table in the warehouse and the tables it is built from. load.py fills raw, then sql/2_rules.sql and sql/3_model.sql build the rest.</text>
-  <rect x="30" y="96" width="140" height="26" rx="13" fill="#94A3B8"/><text x="100.0" y="114" class="layer" text-anchor="middle">Input files</text>
-  <text x="100.0" y="138" class="where" text-anchor="middle">data/input, config</text>
-  <rect x="215" y="96" width="170" height="26" rx="13" fill="#3B82F6"/><text x="300.0" y="114" class="layer" text-anchor="middle">1  Raw</text>
-  <text x="300.0" y="138" class="where" text-anchor="middle">schema raw, tables</text>
-  <rect x="470" y="96" width="200" height="26" rx="13" fill="#14B8A6"/><text x="570.0" y="114" class="layer" text-anchor="middle">2  Star schema</text>
-  <text x="570.0" y="138" class="where" text-anchor="middle">schema mart, tables</text>
-  <rect x="825" y="96" width="145" height="26" rx="13" fill="#22C55E"/><text x="897.5" y="114" class="layer" text-anchor="middle">3  Power BI</text>
-  <text x="897.5" y="138" class="where" text-anchor="middle">reads schema mart</text>
-  <rect x="30" y="150" width="140" height="32" rx="7" fill="#13233D" stroke="#94A3B8" stroke-opacity="0.8"/><text x="40" y="171" class="name">config/client.yaml</text>
-  <rect x="30" y="196" width="140" height="216" rx="10" fill="#13233D" stroke="#94A3B8" stroke-opacity="0.7"/>
-  <text x="44" y="226" class="name" font-weight="700">5 CSV files</text>
-  <text x="44" y="246" class="count" style="fill:#CBD5E1;font-size:12.5px"></text>
-  <text x="44" y="266" class="count" style="fill:#CBD5E1;font-size:12.5px">3 store exports:</text>
-  <text x="44" y="286" class="count" style="fill:#CBD5E1;font-size:12.5px">orders, payments,</text>
-  <text x="44" y="306" class="count" style="fill:#CBD5E1;font-size:12.5px">customers</text>
-  <text x="44" y="326" class="count" style="fill:#CBD5E1;font-size:12.5px"></text>
-  <text x="44" y="346" class="count" style="fill:#CBD5E1;font-size:11px">+ payment_methods.csv</text>
-  <text x="44" y="366" class="count" style="fill:#CBD5E1;font-size:12.5px">+ regions.csv</text>
-  <line x1="170" y1="212.0" x2="213" y2="212.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="258.0" x2="213" y2="258.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="304.0" x2="213" y2="304.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="350.0" x2="213" y2="350.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="396.0" x2="213" y2="396.0" class="edge" marker-end="url(#arrow)"/>
-  <rect x="215" y="196" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="217" class="name">orders</text><text x="377" y="217" class="count" text-anchor="end">99,441</text>
-  <rect x="215" y="242" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="263" class="name">order_payments</text><text x="377" y="263" class="count" text-anchor="end">103,886</text>
-  <rect x="215" y="288" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="309" class="name">customers</text><text x="377" y="309" class="count" text-anchor="end">99,441</text>
-  <rect x="215" y="334" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="355" class="name">payment_methods</text><text x="377" y="355" class="count" text-anchor="end">5</text>
-  <rect x="215" y="380" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="401" class="name">regions</text><text x="377" y="401" class="count" text-anchor="end">27</text>
-  <rect x="470" y="150" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="171" class="name">fact_instalment</text><text x="662" y="171" class="count" text-anchor="end">296,425</text>
-  <rect x="470" y="288" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="309" class="name">dim_date</text><text x="662" y="309" class="count" text-anchor="end">1,338</text>
-  <rect x="470" y="334" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="355" class="name">dim_payment_method</text><text x="662" y="355" class="count" text-anchor="end">5</text>
-  <rect x="470" y="380" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="401" class="name">dim_state</text><text x="662" y="401" class="count" text-anchor="end">27</text>
-  <line x1="170" y1="166.0" x2="468" y2="166.0" class="edge" marker-end="url(#arrow)"/>
-  <text x="300" y="184.0" class="where" text-anchor="middle">late_after_days, via load.py</text>
-  <path d="M385 212 L494 212 Q500 212 500 206 L500 183" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 258 L534 258 Q540 258 540 252 L540 183" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 304 L424 304 Q430 304 430 298 L430 279 Q430 273 436 273 L574 273 Q580 273 580 267 L580 183" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 350 L469 350" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 396 L469 396" class="edge" marker-end="url(#arrow)"/>
-  <path d="M670 166 L686 166 Q692 166 692 172 L692 298 Q692 304 686 304 L671 304" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
-  <path d="M712 150 H724 V412 H712" class="edge" stroke="#14B8A6"/>
-  <line x1="724" y1="281.0" x2="830" y2="281.0" class="edge" stroke="#22C55E" marker-end="url(#arrow)"/>
-  <rect x="832" y="222.0" width="138" height="118" rx="12" fill="#13233D" stroke="#22C55E" stroke-opacity="0.7"/>
-  <rect x="843" y="238.0" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="259.0" class="name" text-anchor="middle">Daily cash</text>
-  <rect x="843" y="292.0" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="313.0" class="name" text-anchor="middle">Due and late</text>
-  <text x="40" y="446" class="where">dashed: dim_date runs from the first order_date to the last cash_date in fact_instalment.</text>
-  <text x="40" y="466" class="where">load.py check: fact_instalment holds all 103,886 payments of order_payments, and received + due + never paid = BRL 16,008,872.12.</text>
+  <text x="40" y="74" class="sub">Every table, the tables it is built from and its rows after one run. load.py fills Bronze, then runs one SQL file per layer.</text>
+
+  <rect x="20" y="96" width="120" height="26" rx="13" fill="#3B82F6"/><text x="80" y="114" class="layer" text-anchor="middle">1  Bronze</text>
+  <text x="80" y="136" class="where" text-anchor="middle">schema bronze, text</text>
+  <rect x="174" y="96" width="120" height="26" rx="13" fill="#0EA5E9"/><text x="234" y="114" class="layer" text-anchor="middle">2  Silver</text>
+  <text x="234" y="136" class="where" text-anchor="middle">schema silver, tables</text>
+  <rect x="328" y="96" width="136" height="26" rx="13" fill="#F59E0B"/><text x="396" y="114" class="layer" text-anchor="middle">3  Gold</text>
+  <text x="396" y="136" class="where" text-anchor="middle">schema gold, table</text>
+  <rect x="498" y="96" width="140" height="26" rx="13" fill="#14B8A6"/><text x="568" y="114" class="layer" text-anchor="middle">4  Semantic</text>
+  <text x="568" y="136" class="where" text-anchor="middle">schema semantic, tables</text>
+  <rect x="672" y="96" width="146" height="26" rx="13" fill="#A855F7"/><text x="745" y="114" class="layer" text-anchor="middle">5  Analytical</text>
+  <text x="745" y="136" class="where" text-anchor="middle">schema analytical, views</text>
+  <rect x="852" y="96" width="128" height="26" rx="13" fill="#22C55E"/><text x="916" y="114" class="layer" text-anchor="middle">6  Reporting</text>
+  <text x="916" y="136" class="where" text-anchor="middle">reads the two before</text>
+
+  <!-- Bronze to Silver, one file each -->
+  <line x1="140" y1="251" x2="173" y2="251" class="edge" marker-end="url(#arrow)"/>
+  <line x1="140" y1="293" x2="173" y2="293" class="edge" marker-end="url(#arrow)"/>
+  <line x1="140" y1="335" x2="173" y2="335" class="edge" marker-end="url(#arrow)"/>
+  <line x1="140" y1="377" x2="173" y2="377" class="edge" marker-end="url(#arrow)"/>
+  <line x1="140" y1="419" x2="173" y2="419" class="edge" marker-end="url(#arrow)"/>
+  <!-- Silver to Gold: payments joined to their order and customer -->
+  <path d="M294 251 C311 251 311 284 327 284" class="edge" marker-end="url(#arrow)"/>
+  <line x1="294" y1="293" x2="327" y2="293" class="edge" marker-end="url(#arrow)"/>
+  <path d="M294 335 C311 335 311 302 327 302" class="edge" marker-end="url(#arrow)"/>
+  <line x1="396" y1="226" x2="396" y2="275" class="edge" marker-end="url(#arrow)"/>
+  <!-- Gold and Silver to Semantic -->
+  <line x1="464" y1="293" x2="497" y2="293" class="edge" marker-end="url(#arrow)"/>
+  <line x1="294" y1="377" x2="497" y2="377" class="edge" marker-end="url(#arrow)"/>
+  <line x1="294" y1="419" x2="497" y2="419" class="edge" marker-end="url(#arrow)"/>
+  <line x1="568" y1="184" x2="568" y2="191" class="edge" marker-end="url(#arrow)"/>
+  <!-- Semantic to Analytical -->
+  <path d="M638 209 C655 209 655 204.5 671 204.5" class="edge" marker-end="url(#arrow)"/>
+  <path d="M638 284 C655 284 655 213.5 671 213.5" class="edge" marker-end="url(#arrow)"/>
+  <path d="M638 293 C655 293 655 288.5 671 288.5" class="edge" marker-end="url(#arrow)"/>
+  <path d="M638 377 C655 377 655 297.5 671 297.5" class="edge" marker-end="url(#arrow)"/>
+  <path d="M638 302 C655 302 655 372.5 671 372.5" class="edge" marker-end="url(#arrow)"/>
+  <path d="M638 419 C655 419 655 381.5 671 381.5" class="edge" marker-end="url(#arrow)"/>
+
+  <rect x="20" y="150" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#3B82F6" stroke-width="1.3" stroke-dasharray="4 3"/><text x="30" y="165" class="name">quarantine</text><text x="30" y="179" class="count">0 rows refused</text>
+  <rect x="20" y="192" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#64748B" stroke-width="1.3" stroke-dasharray="4 3"/><text x="30" y="207" class="name">ops.load_log</text><text x="30" y="221" class="count">5 rows per load</text>
+  <rect x="20" y="234" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#3B82F6" stroke-width="1.3"/><text x="30" y="249" class="name">orders</text><text x="30" y="263" class="count">99,441 rows</text>
+  <rect x="20" y="276" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#3B82F6" stroke-width="1.3"/><text x="30" y="291" class="name">order_payments</text><text x="30" y="305" class="count">103,886 rows</text>
+  <rect x="20" y="318" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#3B82F6" stroke-width="1.3"/><text x="30" y="333" class="name">customers</text><text x="30" y="347" class="count">99,441 rows</text>
+  <rect x="20" y="360" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#3B82F6" stroke-width="1.3"/><text x="30" y="375" class="name">payment_methods</text><text x="30" y="389" class="count">5 rows</text>
+  <rect x="20" y="402" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#3B82F6" stroke-width="1.3"/><text x="30" y="417" class="name">regions</text><text x="30" y="431" class="count">27 rows</text>
+
+  <rect x="174" y="234" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#0EA5E9" stroke-width="1.3"/><text x="184" y="249" class="name">orders</text><text x="184" y="263" class="count">99,441 rows</text>
+  <rect x="174" y="276" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#0EA5E9" stroke-width="1.3"/><text x="184" y="291" class="name">order_payments</text><text x="184" y="305" class="count">103,886 rows</text>
+  <rect x="174" y="318" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#0EA5E9" stroke-width="1.3"/><text x="184" y="333" class="name">customers</text><text x="184" y="347" class="count">99,441 rows</text>
+  <rect x="174" y="360" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#0EA5E9" stroke-width="1.3"/><text x="184" y="375" class="name">payment_methods</text><text x="184" y="389" class="count">5 rows</text>
+  <rect x="174" y="402" width="120" height="34" rx="7" fill="#F8FAFC" stroke="#0EA5E9" stroke-width="1.3"/><text x="184" y="417" class="name">regions</text><text x="184" y="431" class="count">27 rows</text>
+
+  <rect x="328" y="192" width="136" height="34" rx="7" fill="#F8FAFC" stroke="#64748B" stroke-width="1.3" stroke-dasharray="4 3"/><text x="338" y="207" class="name">late_after_days: 3</text><text x="338" y="221" class="count">config/client.yaml</text>
+  <rect x="328" y="276" width="136" height="34" rx="7" fill="#F8FAFC" stroke="#F59E0B" stroke-width="1.3"/><text x="338" y="291" class="name">instalment</text><text x="338" y="305" class="count">296,425 rows</text>
+
+  <rect x="498" y="150" width="140" height="34" rx="7" fill="#F8FAFC" stroke="#64748B" stroke-width="1.3" stroke-dasharray="4 3"/><text x="508" y="165" class="name">calendar: 2016 to 2020</text><text x="508" y="179" class="count">config/client.yaml</text>
+  <rect x="498" y="192" width="140" height="34" rx="7" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.3"/><text x="508" y="207" class="name">dim_date</text><text x="508" y="221" class="count">1,827 rows</text>
+  <rect x="498" y="276" width="140" height="34" rx="7" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.3"/><text x="508" y="291" class="name">fact_instalment</text><text x="508" y="305" class="count">296,425 rows</text>
+  <rect x="498" y="360" width="140" height="34" rx="7" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.3"/><text x="508" y="375" class="name">dim_payment_method</text><text x="508" y="389" class="count">5 rows</text>
+  <rect x="498" y="402" width="140" height="34" rx="7" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.3"/><text x="508" y="417" class="name">dim_state</text><text x="508" y="431" class="count">27 rows</text>
+
+  <rect x="672" y="192" width="146" height="34" rx="7" fill="#F8FAFC" stroke="#A855F7" stroke-width="1.3"/><text x="682" y="207" class="name">cash_by_month</text><text x="682" y="221" class="count">44 rows</text>
+  <rect x="672" y="276" width="146" height="34" rx="7" fill="#F8FAFC" stroke="#A855F7" stroke-width="1.3"/><text x="682" y="291" class="name">cash_by_method</text><text x="682" y="305" class="count">5 rows</text>
+  <rect x="672" y="360" width="146" height="34" rx="7" fill="#F8FAFC" stroke="#A855F7" stroke-width="1.3"/><text x="682" y="375" class="name">cash_in_by_region</text><text x="682" y="389" class="count">5 rows</text>
+
+  <!-- Reporting: the notebook reads Analytical and Semantic; Power BI imports the four Semantic tables -->
+  <path d="M818 192 H826 V394 H818" class="edge" stroke="#A855F7"/>
+  <line x1="826" y1="289" x2="851" y2="289" class="edge" marker-end="url(#arrow)"/>
+  <path d="M498 444 V450 H638 V444" class="edge" stroke="#14B8A6"/>
+  <path d="M568 450 V478 H851" class="edge" marker-end="url(#arrow)"/>
+  <path d="M836 478 V336 Q836 330 842 330 H851" class="edge" marker-end="url(#arrow)"/>
+  <text x="682" y="471" class="count">4 tables</text>
+  <rect x="852" y="276" width="128" height="64" rx="7" fill="#F8FAFC" stroke="#22C55E" stroke-width="1.3"/><text x="862" y="294" class="name">notebook</text><text x="862" y="310" class="count">every README number</text>
+  <rect x="852" y="440" width="128" height="90" rx="10" fill="#F8FAFC" stroke="#22C55E" stroke-width="1.3"/><text x="862" y="458" class="name" font-weight="700">Power BI</text>
+  <rect x="860" y="468" width="112" height="22" rx="11" fill="#DCFCE7"/><text x="916" y="483" class="count" style="fill:#14532D" text-anchor="middle">Daily cash</text>
+  <rect x="860" y="497" width="112" height="22" rx="11" fill="#DCFCE7"/><text x="916" y="512" class="count" style="fill:#14532D" text-anchor="middle">Due and late</text>
+
+  <text x="20" y="556" class="where">data/input: 5 CSV files, 3 shop exports (orders, payments, customers) and the 2 mapping files (payment_methods.csv, regions.csv).</text>
+  <text x="20" y="574" class="where">load.py check: fact_instalment holds all 103,886 payments of bronze.order_payments, and received + due + never paid = BRL 16,008,872.12.</text>
 </svg>

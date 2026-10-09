@@ -13,7 +13,7 @@ From opening Power BI Desktop to the last screenshot. Tick each step; stop at a 
 4. Home > Get data > Blank query > Advanced Editor: paste `Warehouse`, Done, rename it `Warehouse`. Credentials: Database, user `warehouse.user` from `config/client.yaml`, password `DB_PASSWORD` from `.env` (demo: `cash`, `cash`). Right-click > untick **Enable load**.
 5. Repeat with `fact_instalment`, `dim_date`, `dim_payment_method`, `dim_state` (Blank query, paste, rename).
 6. Home > Close & Apply.
-7. **Check C1:** row counts 296,425 / 1,338 / 5 / 27.
+7. **Check C1:** row counts 296,425 / 1,827 / 5 / 27.
 8. Home > Enter data: name `_Measures`, Load.
 
 ## Model ([02-model.md](02-model.md))

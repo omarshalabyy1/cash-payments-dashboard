@@ -1,5 +1,5 @@
--- Step 2, Rules: cash in, cash still due and late payments, defined once.
--- The notebook and every Power BI measure read the status and is_late set here; nothing redefines them.
+-- Gold layer: the cash rules, defined once. One row per instalment of a payment, with its cash date, amount,
+-- status and late flag. The Semantic layer, the notebook and every Power BI measure read them; nothing redefines them.
 --
 -- The source says how many instalments a card payment has, but not when each one is paid. So the
 -- schedule below is a stated assumption, not data:
@@ -13,10 +13,10 @@
 -- The instalments of a payment add up to its value to the cent: the first N - 1 are cut to the cent,
 -- the last one takes the remainder.
 
-drop schema if exists mart cascade;
-create schema mart;
+drop schema if exists gold cascade;
+create schema gold;
 
-create table mart.fact_instalment as
+create table gold.instalment as
 with payment as (
     select
         p.order_id || '-' || p.payment_sequential as payment_id,
@@ -29,9 +29,9 @@ with payment as (
         o.order_approved_at,
         o.order_approved_at > o.order_purchase_timestamp
             + make_interval(days => current_setting('client.late_after_days')::int) as confirmed_late
-    from raw.order_payments p
-    join raw.orders o    on o.order_id = p.order_id
-    join raw.customers c on c.customer_id = o.customer_id
+    from silver.order_payments p
+    join silver.orders o    on o.order_id = p.order_id
+    join silver.customers c on c.customer_id = o.customer_id
 ),
 instalment as (
     select
@@ -61,4 +61,6 @@ select
     end as status,
     coalesce(i.confirmed_late, false) as is_late
 from instalment i
-cross join (select max(order_approved_at)::date as report_date from raw.orders) r;
+cross join (select max(order_approved_at)::date as report_date from silver.orders) r;
+
+alter table gold.instalment add primary key (payment_id, instalment_no);

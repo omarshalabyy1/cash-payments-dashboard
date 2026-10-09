@@ -7,19 +7,19 @@ A star schema: one fact table in the middle, three dimensions around it, and a t
 | Table | Grain (one row per) | Key | Rows | Why |
 |---|---|---|---|---|
 | fact_instalment | instalment of a payment | `payment_id` + `instalment_no` | 296,425 | Money lands on a date per instalment, so cash by day needs this grain |
-| dim_date | day, 4 Sep 2016 to 3 May 2020 | `date` | 1,338 | Runs to the last instalment, so every Still due row has its day |
+| dim_date | day, 1 Jan 2016 to 31 Dec 2020 | `date` | 1,827 | A fixed range from `config/client.yaml` (`calendar`), whole years, covering every order and every Still due instalment |
 | dim_payment_method | payment type | `payment_type` | 5 | Turns codes like `credit_card` into names and fixes their order |
 | dim_state | customer state | `customer_state` | 27 | Gives each state its region, the level the report shows |
 | _Measures | (holds the measures only) | | | Keeps the 12 measures in one place, apart from the data |
 
-There are no calculated columns and no calculated tables: every rule is already in the warehouse (`sql/2_rules.sql`).
+There are no calculated columns and no calculated tables: every rule is already in the warehouse, in the Gold layer (`sql/3_gold.sql`).
 
 ## Mark the date table
 
 Select `dim_date` > Table tools > Mark as date table > Date column: `date`.
 Why: Power BI then uses this calendar for every date, not its own hidden ones.
 
-The date table comes from SQL (`sql/3_model.sql`) through the `dim_date` query in 01; there is no DAX calendar.
+The date table comes from the Semantic layer (`sql/4_semantic.sql`, a fixed range set in `config/client.yaml`, never the MIN and MAX of the fact) through the `dim_date` query in 01; there is no DAX calendar.
 
 ## Relationships
 

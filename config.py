@@ -12,6 +12,7 @@ REQUIRED = [
     "warehouse.host", "warehouse.port", "warehouse.database", "warehouse.user",
     "inputs.orders", "inputs.payments", "inputs.customers", "inputs.payment_methods", "inputs.regions",
     "rules.late_after_days",
+    "calendar.start", "calendar.end",
     "report.title", "report.check_month",
     "report.colours.data", "report.colours.text", "report.colours.muted",
     "report.colours.page", "report.colours.line", "report.colours.danger",

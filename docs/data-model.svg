@@ -1,67 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 513" width="1000" height="513" role="img" aria-label="Star schema: fact_instalment (296,425 rows, one per instalment of a payment, key payment_id plus instalment_no) joins three dimensions, many to one: dim_payment_method (5 rows) on payment_type, dim_state (27) on customer_state and dim_date (1,338 days) on cash_date, the day the money lands. order_date is also a foreign key to dim_date, with no relationship in Power BI.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 513" width="1000" height="513" role="img" aria-label="The Semantic layer's star schema: fact_instalment (296,425 rows, one per instalment of a payment, key payment_id plus instalment_no) joins three dimensions, many to one: dim_payment_method (5 rows) on payment_type, dim_state (27) on customer_state and dim_date (1,827 days, every day of 2016 to 2020 from the calendar setting) on cash_date, the day the money lands. order_date is also a foreign key to dim_date, with no relationship in Power BI.">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0B1220"/>
-      <stop offset="0.55" stop-color="#10213A"/>
-      <stop offset="1" stop-color="#1E1B4B"/>
-    </linearGradient>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M0 0 L10 5 L0 10 Z" fill="#64748B"/>
     </marker>
   </defs>
   <style>
     text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
-    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
-    .sub { font-size: 13.5px; fill: #CBD5E1; }
+    .title { font-size: 21px; font-weight: 700; fill: #0E1630; }
+    .sub { font-size: 13.5px; fill: #475569; }
     .layer { font-size: 14px; font-weight: 700; fill: #0B1220; }
-    .where { font-size: 12px; fill: #94A3B8; }
-    .name { font-size: 13px; fill: #F1F5F9; }
-    .count { font-size: 11.5px; fill: #94A3B8; }
-    .col { font-size: 12.5px; fill: #E2E8F0; }
+    .where { font-size: 12px; fill: #506078; }
+    .name { font-size: 13px; fill: #0E1630; }
+    .count { font-size: 11.5px; fill: #506078; }
+    .col { font-size: 12.5px; fill: #0E1630; }
     .key { font-size: 11px; font-weight: 700; }
     .edge { fill: none; stroke: #64748B; stroke-width: 1.4; }
   </style>
-  <rect width="1000" height="513" rx="22" fill="url(#bg)"/>
-  <text x="40" y="50" class="title">The star schema</text>
-  <text x="40" y="74" class="sub">One fact row per instalment, three dimensions around it. The keys are the natural codes, enforced in PostgreSQL.</text>
+  <rect x="1" y="1" width="998" height="511" rx="22" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="40" y="50" class="title">The star schema (Semantic layer)</text>
+  <text x="40" y="74" class="sub">One fact row per instalment, three dimensions around it. Schema semantic; the keys are the natural codes, enforced in PostgreSQL.</text>
   <path d="M370 259.5 C325.0 259.5 325.0 167.5 280 167.5" class="edge" stroke="#94A3B8"/>
-  <text x="360" y="254.5" class="key" fill="#CBD5E1" text-anchor="end">*</text><text x="288" y="162.5" class="key" fill="#CBD5E1" text-anchor="start">1</text>
+  <text x="360" y="254.5" class="key" fill="#475569" text-anchor="end">*</text><text x="288" y="162.5" class="key" fill="#475569" text-anchor="start">1</text>
   <path d="M370 282.5 C325.0 282.5 325.0 327.5 280 327.5" class="edge" stroke="#94A3B8"/>
-  <text x="360" y="277.5" class="key" fill="#CBD5E1" text-anchor="end">*</text><text x="288" y="322.5" class="key" fill="#CBD5E1" text-anchor="start">1</text>
+  <text x="360" y="277.5" class="key" fill="#475569" text-anchor="end">*</text><text x="288" y="322.5" class="key" fill="#475569" text-anchor="start">1</text>
   <path d="M630 305.5 C675.0 305.5 675.0 301.0 720 301.0" class="edge" stroke="#94A3B8" stroke-dasharray="4 4"/>
-  <text x="640" y="300.5" class="key" fill="#CBD5E1" text-anchor="start">*</text>
+  <text x="640" y="300.5" class="key" fill="#475569" text-anchor="start">*</text>
   <path d="M630 328.5 C675.0 328.5 675.0 314.0 720 314.0" class="edge" stroke="#94A3B8"/>
-  <text x="640" y="323.5" class="key" fill="#CBD5E1" text-anchor="start">*</text><text x="712" y="327.0" class="key" fill="#CBD5E1" text-anchor="end">1</text>
-  <rect x="370" y="110" width="260" height="307" rx="10" fill="#13233D" stroke="#2563EB" stroke-width="1.5"/>
+  <text x="640" y="323.5" class="key" fill="#475569" text-anchor="start">*</text><text x="712" y="327.0" class="key" fill="#475569" text-anchor="end">1</text>
+  <rect x="370" y="110" width="260" height="307" rx="10" fill="#F8FAFC" stroke="#2563EB" stroke-width="1.5"/>
   <path d="M370 120 a10 10 0 0 1 10 -10 h240 a10 10 0 0 1 10 10 v36 h-260 Z" fill="#2563EB"/>
   <text x="382" y="130" class="name" font-weight="700" style="fill:#FFFFFF">fact_instalment</text><text x="382" y="147" class="count" style="fill:#FFFFFF">296,425 rows</text>
-  <text x="382" y="172" class="col">payment_id</text><text x="618" y="172" class="key" fill="#FBBF24" text-anchor="end">PK</text>
-  <text x="382" y="195" class="col">instalment_no</text><text x="618" y="195" class="key" fill="#FBBF24" text-anchor="end">PK</text>
+  <text x="382" y="172" class="col">payment_id</text><text x="618" y="172" class="key" fill="#B45309" text-anchor="end">PK</text>
+  <text x="382" y="195" class="col">instalment_no</text><text x="618" y="195" class="key" fill="#B45309" text-anchor="end">PK</text>
   <text x="382" y="218" class="col">order_id</text>
   <text x="382" y="241" class="col">instalments</text>
-  <text x="382" y="264" class="col">payment_type</text><text x="618" y="264" class="key" fill="#93C5FD" text-anchor="end">FK</text>
-  <text x="382" y="287" class="col">customer_state</text><text x="618" y="287" class="key" fill="#93C5FD" text-anchor="end">FK</text>
-  <text x="382" y="310" class="col">order_date</text><text x="618" y="310" class="key" fill="#93C5FD" text-anchor="end">FK</text>
-  <text x="382" y="333" class="col">cash_date</text><text x="618" y="333" class="key" fill="#93C5FD" text-anchor="end">FK</text>
+  <text x="382" y="264" class="col">payment_type</text><text x="618" y="264" class="key" fill="#1D4ED8" text-anchor="end">FK</text>
+  <text x="382" y="287" class="col">customer_state</text><text x="618" y="287" class="key" fill="#1D4ED8" text-anchor="end">FK</text>
+  <text x="382" y="310" class="col">order_date</text><text x="618" y="310" class="key" fill="#1D4ED8" text-anchor="end">FK</text>
+  <text x="382" y="333" class="col">cash_date</text><text x="618" y="333" class="key" fill="#1D4ED8" text-anchor="end">FK</text>
   <text x="382" y="356" class="col">amount</text>
   <text x="382" y="379" class="col">status</text>
   <text x="382" y="402" class="col">is_late</text>
-  <rect x="40" y="110" width="240" height="123" rx="10" fill="#13233D" stroke="#14B8A6" stroke-width="1.5"/>
+  <rect x="40" y="110" width="240" height="123" rx="10" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.5"/>
   <path d="M40 120 a10 10 0 0 1 10 -10 h220 a10 10 0 0 1 10 10 v36 h-240 Z" fill="#14B8A6"/>
   <text x="52" y="130" class="name" font-weight="700" style="fill:#0B1220">dim_payment_method</text><text x="52" y="147" class="count" style="fill:#0B1220">5 rows</text>
-  <text x="52" y="172" class="col">payment_type</text><text x="268" y="172" class="key" fill="#FBBF24" text-anchor="end">PK</text>
+  <text x="52" y="172" class="col">payment_type</text><text x="268" y="172" class="key" fill="#B45309" text-anchor="end">PK</text>
   <text x="52" y="195" class="col">payment_method</text>
   <text x="52" y="218" class="col">sort_order</text>
-  <rect x="40" y="270" width="240" height="123" rx="10" fill="#13233D" stroke="#14B8A6" stroke-width="1.5"/>
+  <rect x="40" y="270" width="240" height="123" rx="10" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.5"/>
   <path d="M40 280 a10 10 0 0 1 10 -10 h220 a10 10 0 0 1 10 10 v36 h-240 Z" fill="#14B8A6"/>
   <text x="52" y="290" class="name" font-weight="700" style="fill:#0B1220">dim_state</text><text x="52" y="307" class="count" style="fill:#0B1220">27 rows</text>
-  <text x="52" y="332" class="col">customer_state</text><text x="268" y="332" class="key" fill="#FBBF24" text-anchor="end">PK</text>
+  <text x="52" y="332" class="col">customer_state</text><text x="268" y="332" class="key" fill="#B45309" text-anchor="end">PK</text>
   <text x="52" y="355" class="col">state</text>
   <text x="52" y="378" class="col">region</text>
-  <rect x="720" y="250" width="240" height="169" rx="10" fill="#13233D" stroke="#14B8A6" stroke-width="1.5"/>
+  <rect x="720" y="250" width="240" height="169" rx="10" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.5"/>
   <path d="M720 260 a10 10 0 0 1 10 -10 h220 a10 10 0 0 1 10 10 v36 h-240 Z" fill="#14B8A6"/>
-  <text x="732" y="270" class="name" font-weight="700" style="fill:#0B1220">dim_date</text><text x="732" y="287" class="count" style="fill:#0B1220">1,338 rows</text>
-  <text x="732" y="312" class="col">date</text><text x="948" y="312" class="key" fill="#FBBF24" text-anchor="end">PK</text>
+  <text x="732" y="270" class="name" font-weight="700" style="fill:#0B1220">dim_date</text><text x="732" y="287" class="count" style="fill:#0B1220">1,827 rows</text>
+  <text x="732" y="312" class="col">date</text><text x="948" y="312" class="key" fill="#B45309" text-anchor="end">PK</text>
   <text x="732" y="335" class="col">year</text>
   <text x="732" y="358" class="col">year_month</text>
   <text x="732" y="381" class="col">weekday</text>

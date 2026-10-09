@@ -22,6 +22,10 @@ inputs:                              # file names in data/input/ (columns: data/
 rules:
   late_after_days: 3                 # a payment confirmed more than this many days after its order is late
 
+calendar:                            # the date table (dim_date): every day from start to end, whole years
+  start: "2016-01-01"                # on or before the first order
+  end: "2020-12-31"                  # on or after the last instalment; a date outside the range stops the load
+
 report:
   title: Daily cash and payments     # the Power BI theme name
   check_month: "2018-05"             # the month powerbi/06-checks.md uses to test the date slicer

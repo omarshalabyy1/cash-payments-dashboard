@@ -32,8 +32,10 @@ Think of it like a jar for each month: every payment drops its instalments into 
 | **Database** | A program that stores tables and answers questions about them. This project uses **PostgreSQL** (often "Postgres"), a free and widely used one. |
 | **SQL** | The language used to ask a database questions and build tables. The `.sql` files in `sql/` are SQL. |
 | **Table, row, column** | Like a spreadsheet sheet: each row is one thing (one order, one payment), each column is one fact about it (its date, its amount). |
-| **Schema** | A folder of tables inside the database. This project has two: `raw` (the files as they came) and `mart` (the clean tables the report reads). |
-| **Warehouse** | A database built for reporting, not for running the shop. Here, the PostgreSQL database with the `raw` and `mart` schemas. |
+| **Schema** | A folder of tables inside the database. This project has one per layer: `bronze`, `silver`, `gold`, `semantic` and `analytical`, plus `ops` for the load log. |
+| **Layers** | The six steps the data goes through, left to right, each reading only the one before it. **Bronze**: the files as they came, as text, with the file and row each value came from. **Silver**: the same rows with types and keys. **Gold**: the business rules. **Semantic**: the star schema the report reads. **Analytical**: totals over the star schema. **Reporting**: the notebook and Power BI. |
+| **Quarantine** | `bronze.quarantine`, where a row the load refuses goes (an empty required value, or a value that is not a valid number or date), with the reason. 0 rows in this data. |
+| **Warehouse** | A database built for reporting, not for running the shop. Here, the PostgreSQL database with the six layers' schemas. |
 | **CSV** | A plain text file of a table, one row per line, values separated by commas. The inputs are CSV files. |
 | **`COPY`** | The PostgreSQL command that loads a whole CSV file into a table at once. Much faster than inserting rows one by one. |
 | **Fact table** | The big table of events you add up. Here `fact_instalment`: one row per instalment, with its amount. |
@@ -64,13 +66,15 @@ Run in this order (the commands are in the README's "Run it" section):
 |---|---|---|
 | 0 | `docker-compose.yml` | Starts PostgreSQL in a container on port 5434. |
 | 0 | `config/client.yaml`, `config.py` | Hold every setting; `config.py` reads them so no file hard-codes a value. |
-| 1 | `load.py` + `sql/1_load.sql` | Checks that the 5 input files exist and have the needed columns, then loads each into a `raw` table with `COPY`, unchanged. |
-| 2 | `sql/2_rules.sql` | The business rules. Splits each payment into instalments, gives each a cash date, an amount, a status and a late flag. Builds `mart.fact_instalment`. |
-| 3 | `sql/3_model.sql` | Builds the three dimension tables and adds the primary and foreign keys. This makes the star schema. |
-| 4 | end of `load.py` | The check: every payment is in the model, and received + still due + never paid = the source total. If not, it stops with `CHECK FAILED`. |
-| 5 | `theme.py` | Writes the Power BI theme file from the colours in `client.yaml`. |
-| 6 | `analysis/analysis.ipynb` | Reads the model, computes every number in the README and draws the charts in `docs/`. |
-| 7 | `powerbi/` | Step-by-step instructions to build the Power BI report: queries, model, measures, pages, and the numbers each card must show (`06-checks.md`). |
+| 1 | `load.py` | Bronze layer. Checks that the 5 input files exist, have the needed columns and have rows, then loads each into a `bronze` table with `COPY`, as text, unchanged, with the file name, row number, run id and load time. A row with an empty required value or a value that is not a valid number or date goes to `bronze.quarantine`; a key that appears twice stops the load. Each load is logged in `ops.load_log`. |
+| 2 | `sql/2_silver.sql` | Silver layer. Gives every column its type (dates, whole numbers, money) and its primary key. `load.py` then checks that no row was lost on the way. |
+| 3 | `sql/3_gold.sql` | Gold layer, the business rules. Splits each payment into instalments, gives each a cash date, an amount, a status and a late flag. Builds `gold.instalment`. |
+| 4 | `sql/4_semantic.sql` | Semantic layer. Copies the instalments into `semantic.fact_instalment`, builds the three dimension tables (the dates from the calendar setting, the methods and states from Silver) and adds the primary and foreign keys. This makes the star schema. |
+| 5 | `sql/5_analytical.sql` | Analytical layer. Three views of totals over the star schema: by payment method, by region and by month. |
+| 6 | end of `load.py` | The check: every payment loaded is in the star schema, and received + still due + never paid = the source total. If not, it stops with `CHECK FAILED`, and nothing is changed: the whole run is one transaction. |
+| 7 | `theme.py` | Writes the Power BI theme file from the colours in `client.yaml`. |
+| 8 | `analysis/analysis.ipynb` | Reporting layer. Reads the Semantic and Analytical layers, computes every number in the README and draws the charts in `docs/`. |
+| 9 | `powerbi/` | Reporting layer. Step-by-step instructions to build the Power BI report: queries, model, measures, pages, and the numbers each card must show (`06-checks.md`). |
 
 The 5 input files: 3 come from the shop (orders, payments, customers; you download them, see Data in the README) and 2 are small mapping files committed in `data/input/` (`payment_methods.csv` gives each payment code a readable name, `regions.csv` gives each state its name and region).
 
@@ -104,7 +108,7 @@ All of these are printed by the notebook ([`analysis/analysis.ipynb`](../analysi
 | **BRL 353,690.84** | The value of those late payments. | Sum of every instalment of every late payment. | notebook cell 11 |
 | **78% of late are boleto** | Most late payments were bank slips. | 1,796 late boleto payments / 2,301 late payments. | notebook cell 11 |
 | **9.1% of boleto vs 0.6% of card** | How often each method is late. | Boleto: 1,796 late / 19,754 confirmed. Card: 429 late / 76,739 confirmed. | notebook cell 11 |
-| **3 Sep 2018** | The report date ("today"). | The last day any payment was confirmed in the data. | `sql/2_rules.sql`; notebook cell 1 |
+| **3 Sep 2018** | The report date ("today"). | The last day any payment was confirmed in the data. | `sql/3_gold.sql`; notebook cell 1 |
 | **3 days** | The late threshold. | A setting, `rules.late_after_days` in `config/client.yaml`. A client can change it. | `config/client.yaml` |
 
 Two things that can look wrong but are not:
@@ -117,15 +121,17 @@ Two things that can look wrong but are not:
 | Number | Where you see it | What it means |
 |---|---|---|
 | **5 CSV files** | data-flow.svg | The 5 input files (3 from the shop, 2 mapping files). |
-| **99,441** | data-flow.svg | Rows in `raw.orders` and `raw.customers`: one customer row per order in this data. |
+| **99,441** | data-flow.svg | Rows in `bronze.orders` and `bronze.customers` (and the same in Silver): one customer row per order in this data. |
+| **0 rows refused** | data-flow.svg | Rows in `bronze.quarantine`: every row of the 5 files was loaded. |
 | **296,425** | data-flow.svg, data-model.svg | Rows in `fact_instalment`. It is more than 103,886 because each payment becomes one row per instalment: adding up the number of instalments of every payment gives 296,425 (a payment marked with 0 instalments counts as 1). |
-| **1,338 rows** | data-model.svg | Days in `dim_date`: every day from the first order to the last instalment. |
+| **1,827 rows** | data-model.svg | Days in `dim_date`: every day of the years 2016 to 2020, the fixed range `calendar.start` to `calendar.end` in `config/client.yaml`. It covers the first order (4 Sep 2016) and the last instalment (3 May 2020). |
+| **44 rows** | data-flow.svg | Months in `analytical.cash_by_month`: every month with money received or still due. |
 | **5 rows** | data-model.svg | Payment methods in `dim_payment_method`: credit card, boleto, voucher, debit card and "not defined" (3 payments of 0.00 in the source). |
 | **27 rows** | data-model.svg | Brazil's 26 states plus the Federal District, in `dim_state`. |
 | **1 to \*** | data-model.svg | One dimension row links to many fact rows: one day has many instalments. |
 | **51,338 of 76,795 in 2 to 24 instalments** | mental-model.svg | 76,795 credit card payments; 51,338 of them were split into 2 or more instalments, up to 24. |
 | **BRL 12.5M, 2.87M, 379k, 218k** | mental-model.svg | Total paid by credit card, boleto, voucher and debit card (all statuses, so slightly more than the received shares above). |
-| **01, 02, 03, 04** | how-it-works.svg | The four steps: load, rules, model, report. |
+| **1 to 6** | how-it-works.svg | The six layers: Bronze, Silver, Gold, Semantic, Analytical, Reporting. |
 | **Jan 2017 to Jun 2019** | header.svg | The months shown in the small header chart. The full chart in the README runs to May 2020. |
 
 ## 5. What the results mean for the business
@@ -145,7 +151,7 @@ A shop could not see its cash on a given day because card payments arrive in ins
 Because cash arrives per instalment, not per payment. With one row per instalment, "cash in by month" is a simple sum by cash date. With one row per payment, every report would have to split the payment again, in DAX, every time.
 
 **How do you know the numbers are right?**
-Three ways. `load.py` checks that the model holds all 103,886 payments and that received + due + never paid equals the source total, and stops if not. The notebook re-reads the raw file with pandas, without the database, and asserts the same totals. And the foreign keys stop the load if a payment points at a method, state or day that does not exist.
+Four ways. A row that is not valid is never loaded quietly: it goes to `bronze.quarantine` with the reason, and `ops.load_log` keeps the rows in each file, loaded and refused. `load.py` checks that the model holds all 103,886 payments and that received + due + never paid equals the source total, and stops if not. The notebook re-reads the payments file with pandas, without the database, and asserts the same totals. And the foreign keys stop the load if a payment points at a method, state or day that does not exist.
 
 **Why split amounts by cutting to the cent and giving the remainder to the last instalment?**
 So the parts always add back to the original amount. Rounding each part can create or lose a cent, and then the reconciliation fails.

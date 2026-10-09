@@ -1,29 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" role="img" aria-label="Where the money goes: 103,886 payments worth BRL 16.0 million split by payment method (credit card BRL 12.5 million, boleto 2.87 million, voucher 379 thousand, debit card 218 thousand) and flow into received (BRL 14.4 million, 90.0%), still due on card instalments (BRL 1.56 million, 9.7%) and never paid (BRL 37 thousand, 0.2%) on the report date, 3 Sep 2018. 2,301 payments were confirmed late, 78% of them boleto.">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0B1220"/>
-      <stop offset="0.55" stop-color="#10213A"/>
-      <stop offset="1" stop-color="#0E1630"/>
-    </linearGradient>
-  </defs>
   <style>
     text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
-    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
-    .sub { font-size: 13.5px; fill: #CBD5E1; }
-    .step { font-size: 16px; font-weight: 700; fill: #FFFFFF; }
-    .label { font-size: 14px; font-weight: 700; fill: #FFFFFF; }
-    .label-due { font-size: 14px; font-weight: 700; fill: #60A5FA; }
-    .desc { font-size: 13px; font-weight: 400; fill: #CBD5E1; }
-    .note { font-size: 12px; fill: #60A5FA; }
-    .late { font-size: 12px; fill: #94A3B8; }
-    .cap { font-size: 12px; fill: #94A3B8; }
-    .flow { fill: #94A3B8; fill-opacity: 0.22; }
+    .title { font-size: 21px; font-weight: 700; fill: #0E1630; }
+    .sub { font-size: 13.5px; fill: #475569; }
+    .step { font-size: 16px; font-weight: 700; fill: #0E1630; }
+    .label { font-size: 14px; font-weight: 700; fill: #0E1630; }
+    .label-due { font-size: 14px; font-weight: 700; fill: #2563EB; }
+    .desc { font-size: 13px; font-weight: 400; fill: #334155; }
+    .note { font-size: 12px; fill: #2563EB; }
+    .late { font-size: 12px; fill: #506078; }
+    .cap { font-size: 12px; fill: #506078; }
+    .label, .desc, .late { paint-order: stroke; stroke: #FFFFFF; stroke-width: 3px; stroke-linejoin: round; }
+    .flow { fill: #94A3B8; fill-opacity: 0.3; }
     .due { fill: #3B82F6; fill-opacity: 0.75; }
-    .node { fill: #E2E8F0; }
+    .node { fill: #64748B; }
     .node-due { fill: #3B82F6; }
   </style>
 
-  <rect width="1000" height="600" rx="22" fill="url(#bg)"/>
+  <rect x="1" y="1" width="998" height="598" rx="22" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <text x="50" y="50" class="title">Where the money goes</text>
   <text x="50" y="74" class="sub">Every payment, by how it was paid, to where it stands on the report date. Instalments push card money into the months ahead.</text>
 

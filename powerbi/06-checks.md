@@ -1,6 +1,6 @@
 # 06 · Checks
 
-Every number below comes from `analysis/analysis.ipynb` (section 5) and is checked by the SQL query under it.
+Every number below comes from `analysis/analysis.ipynb` (section 5) and is checked by the SQL query under it, which reads the Semantic layer (schema `semantic`, the tables Power BI imports) or the Analytical layer (schema `analytical`, the totals).
 They are the demo data's numbers. For a client, run the notebook on their data and copy its section 5 into this file; the example month is `report.check_month` in `config/client.yaml`.
 If a card shows anything else, the build has a mistake; the usual causes are at the bottom.
 
@@ -12,11 +12,11 @@ docker compose exec db psql -U cash -d cash -c "<paste the query here>"
 
 ## C1 · Row counts after Close & Apply
 
-Table view, row count at the bottom left: fact_instalment 296,425; dim_date 1,338; dim_payment_method 5; dim_state 27.
+Table view, row count at the bottom left: fact_instalment 296,425; dim_date 1,827; dim_payment_method 5; dim_state 27.
 
 ```sql
-select (select count(*) from mart.fact_instalment) as fact_instalment, (select count(*) from mart.dim_date) as dim_date,
-       (select count(*) from mart.dim_payment_method) as dim_payment_method, (select count(*) from mart.dim_state) as dim_state;
+select (select count(*) from semantic.fact_instalment) as fact_instalment, (select count(*) from semantic.dim_date) as dim_date,
+       (select count(*) from semantic.dim_payment_method) as dim_payment_method, (select count(*) from semantic.dim_state) as dim_state;
 ```
 
 ## Page 1 · Daily cash
@@ -37,7 +37,7 @@ select sum(amount) filter (where status = 'Received') as cash_in,
        count(*) filter (where instalment_no = 1 and status = 'Received' and is_late) as late_payments,
        round(100.0 * count(*) filter (where instalment_no = 1 and status = 'Received' and is_late)
              / count(*) filter (where instalment_no = 1 and status = 'Received'), 1) as late_rate_pct
-from mart.fact_instalment;
+from semantic.fact_instalment;
 -- for May 2018, add before the semicolon: where cash_date between '2018-05-01' and '2018-05-31'
 ```
 
@@ -51,10 +51,8 @@ from mart.fact_instalment;
 | Debit card | 217,989.79 | 1.5% |
 
 ```sql
-select m.payment_method, sum(f.amount) as cash_in,
-       round(100.0 * sum(f.amount) / sum(sum(f.amount)) over (), 1) as share_pct
-from mart.fact_instalment f join mart.dim_payment_method m using (payment_type)
-where f.status = 'Received' group by m.payment_method order by cash_in desc;
+select payment_method, cash_in, round(100.0 * cash_in / sum(cash_in) over (), 1) as share_pct
+from analytical.cash_by_method where cash_in is not null order by cash_in desc;
 ```
 
 **C5 · Cash in by region** (no slicer; tooltip = share):
@@ -68,10 +66,8 @@ where f.status = 'Received' group by m.payment_method order by cash_in desc;
 | North | 378,356.85 | 2.6% |
 
 ```sql
-select s.region, sum(f.amount) as cash_in,
-       round(100.0 * sum(f.amount) / sum(sum(f.amount)) over (), 1) as share_pct
-from mart.fact_instalment f join mart.dim_state s using (customer_state)
-where f.status = 'Received' group by s.region order by cash_in desc;
+select region, cash_in, round(100.0 * cash_in / sum(cash_in) over (), 1) as share_pct
+from analytical.cash_in_by_region order by cash_in desc;
 ```
 
 ## Page 2 · Due and late
@@ -90,7 +86,7 @@ select sum(amount) filter (where status = 'Due') as still_due,
        sum(amount) filter (where status = 'Never paid') as never_paid,
        sum(amount) filter (where is_late) as late_amount,
        max(cash_date) filter (where status = 'Received') as report_date
-from mart.fact_instalment;
+from semantic.fact_instalment;
 ```
 
 **C7 · Still due by month**, the first four columns:
@@ -103,8 +99,8 @@ from mart.fact_instalment;
 | 2018-12 | 180,381.17 |
 
 ```sql
-select to_char(cash_date, 'YYYY-MM') as year_month, sum(amount) as still_due
-from mart.fact_instalment where status = 'Due' group by 1 order by 1 limit 4;
+select year_month, still_due
+from analytical.cash_by_month where still_due > 0 order by year_month limit 4;
 ```
 
 **C8 · Late payments by method** (matrix):
@@ -118,12 +114,9 @@ from mart.fact_instalment where status = 'Due' group by 1 order by 1 limit 4;
 | Total | 103,711 | 2,301 | 2.2% | 353,690.84 |
 
 ```sql
-select m.payment_method,
-       count(*) filter (where f.instalment_no = 1 and f.status = 'Received') as payments_confirmed,
-       count(*) filter (where f.instalment_no = 1 and f.status = 'Received' and f.is_late) as late_payments,
-       sum(f.amount) filter (where f.is_late) as late_amount
-from mart.fact_instalment f join mart.dim_payment_method m using (payment_type)
-group by m.payment_method, m.sort_order order by m.sort_order;
+select payment_method, payments_confirmed, late_payments,
+       round(100.0 * late_payments / payments_confirmed, 1) as late_rate_pct, late_amount
+from analytical.cash_by_method where payments_confirmed > 0 order by sort_order;
 ```
 
 ## If a number is off

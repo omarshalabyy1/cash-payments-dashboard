@@ -1,6 +1,6 @@
 # 01 · Power Query
 
-Five queries: one staging query that holds the connection, and four that load the star schema.
+Five queries: one connection query, and four that load the star schema from the Semantic layer (schema `semantic`).
 For each one: Home > Get data > Blank query, then Home > Advanced Editor, paste the code, Done, and rename the query (right-click > Rename) to the name in the heading.
 
 The server, database and user are the `warehouse` values in `config/client.yaml`; the code below has the demo values (port 5434, `cash`). For a client, change them in the Warehouse query only.
@@ -11,13 +11,13 @@ If it asks about encryption, choose to connect without it (the database runs onl
 |---|---|---|---|
 | Warehouse | No (Enable load off) | | The connection, written once so every table uses the same server |
 | fact_instalment | Yes | 296,425 | The fact table |
-| dim_date | Yes | 1,338 | The calendar, built in SQL so the notebook and the report share one |
+| dim_date | Yes | 1,827 | The calendar, built in SQL from the fixed range in `config/client.yaml`, so the notebook and the report share one |
 | dim_payment_method | Yes | 5 | Readable method names and their order |
 | dim_state | Yes | 27 | State names and the region each belongs to |
 
 No column is renamed: the names come from the warehouse, so a query, a measure and the SQL checks all use the same words.
 
-## Warehouse (staging, do not load)
+## Warehouse (connection only, do not load)
 
 The connection to the warehouse, written once. Right-click the query and untick **Enable load**, so it does not become a table.
 
@@ -35,7 +35,7 @@ One row per instalment of a payment. `order_id` is left out: `payment_id` alread
 ```m
 let
     Source = Warehouse,
-    Navigation = Source{[Schema = "mart", Item = "fact_instalment"]}[Data],
+    Navigation = Source{[Schema = "semantic", Item = "fact_instalment"]}[Data],
     #"Selected Columns" = Table.SelectColumns(Navigation, {
         "payment_id", "instalment_no", "instalments", "payment_type", "customer_state",
         "order_date", "cash_date", "amount", "status", "is_late"
@@ -59,18 +59,18 @@ in
 | Step | What it does |
 |---|---|
 | Source | Starts from the Warehouse connection |
-| Navigation | Opens the table `mart.fact_instalment` |
+| Navigation | Opens the table `semantic.fact_instalment` |
 | Selected Columns | Keeps the ten columns the model needs |
 | Changed Type | Sets each type; `amount` is Fixed decimal number (`Currency.Type`) so money adds up to the cent |
 
 ## dim_date (load)
 
-One row per day, from the first order (4 Sep 2016) to the last instalment (3 May 2020).
+One row per day of the fixed range `calendar.start` to `calendar.end` in `config/client.yaml` (demo: 1 Jan 2016 to 31 Dec 2020). It covers the first order (4 Sep 2016) and the last instalment (3 May 2020); it is never read from the fact table.
 
 ```m
 let
     Source = Warehouse,
-    Navigation = Source{[Schema = "mart", Item = "dim_date"]}[Data],
+    Navigation = Source{[Schema = "semantic", Item = "dim_date"]}[Data],
     #"Selected Columns" = Table.SelectColumns(Navigation, {"date", "year", "year_month", "weekday", "weekday_no"}),
     #"Changed Type" = Table.TransformColumnTypes(#"Selected Columns", {
         {"date", type date},
@@ -90,7 +90,7 @@ One row per payment type (5 rows).
 ```m
 let
     Source = Warehouse,
-    Navigation = Source{[Schema = "mart", Item = "dim_payment_method"]}[Data],
+    Navigation = Source{[Schema = "semantic", Item = "dim_payment_method"]}[Data],
     #"Selected Columns" = Table.SelectColumns(Navigation, {"payment_type", "payment_method", "sort_order"}),
     #"Changed Type" = Table.TransformColumnTypes(#"Selected Columns", {
         {"payment_type", type text},
@@ -108,7 +108,7 @@ One row per customer state (27 rows), with its region.
 ```m
 let
     Source = Warehouse,
-    Navigation = Source{[Schema = "mart", Item = "dim_state"]}[Data],
+    Navigation = Source{[Schema = "semantic", Item = "dim_state"]}[Data],
     #"Selected Columns" = Table.SelectColumns(Navigation, {"customer_state", "state", "region"}),
     #"Changed Type" = Table.TransformColumnTypes(#"Selected Columns", {
         {"customer_state", type text},
@@ -119,7 +119,7 @@ in
     #"Changed Type"
 ```
 
-Then Home > Close & Apply. Expected row counts (Table view, bottom left): fact_instalment 296,425; dim_date 1,338; dim_payment_method 5; dim_state 27.
+Then Home > Close & Apply. Expected row counts (Table view, bottom left): fact_instalment 296,425; dim_date 1,827; dim_payment_method 5; dim_state 27.
 
 ## _Measures (load)
 

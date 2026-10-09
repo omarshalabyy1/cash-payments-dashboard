@@ -22,10 +22,10 @@ The owner learns how much cash came in only at month end, from a spreadsheet nob
 
 ## 🛠️ The solution
 
-A small warehouse in PostgreSQL that turns every order and payment into one row per instalment, with the cash rules written once in SQL, and a Power BI report on top of it: a daily cash page and a due-and-late page. One command loads it and proves that every total still matches the source.
+A small warehouse in PostgreSQL, built in six layers from left to right, that turns every order and payment into one row per instalment, with the cash rules written once in SQL, and a Power BI report on top of it: a daily cash page and a due-and-late page. One command loads it and proves that every total still matches the source. Each layer reads only the layer before it, so a number can be traced back to the file and row it came from.
 
 <p align="center">
-  <img width="100%" src="docs/how-it-works.svg" alt="How it works: 01 Load, orders, payments and customers; 02 Rules, cash in, still due, late and never paid defined once; 03 Model, a star schema with a date table; 04 Report, a Power BI daily cash page.">
+  <img width="100%" src="docs/how-it-works.svg" alt="How it works, in six layers: 1 Bronze, the input files as text with their file and row, refused rows to bronze.quarantine; 2 Silver, typed and keyed; 3 Gold, the cash rules: cash in, still due, late and never paid defined once; 4 Semantic, the star schema with a date table; 5 Analytical, totals by method, region and month; 6 Reporting, the notebook and the Power BI pages.">
 </p>
 
 ### 🔁 The mental model: where the money goes
@@ -38,7 +38,7 @@ Every payment flows from how it was paid to where it stands on the report date. 
 
 ### 📏 The rules, written once
 
-All four live in [`sql/2_rules.sql`](sql/2_rules.sql). The notebook and every Power BI measure read them; nothing redefines them.
+All four live in the Gold layer, [`sql/3_gold.sql`](sql/3_gold.sql). The notebook and every Power BI measure read them; nothing redefines them.
 
 1. **Cash date.** The source records how many instalments a card payment has, but not when each one is paid. So this is an assumption, not data: instalment 1 is counted on the day the payment was confirmed, instalment *k* is counted *k* − 1 months later. Boleto, debit card and voucher are one instalment.
 2. **Report date.** The last day any payment was confirmed: 3 Sep 2018. Instalments on or before it are *received*; later ones are *still due*.
@@ -75,7 +75,7 @@ Every number above is computed in [`analysis/analysis.ipynb`](analysis/analysis.
 
 ## 📊 The Power BI report
 
-Two pages on the star schema: **Daily cash** (cash in by day, payment method and region, with payments confirmed and the late rate for any date range) and **Due and late** (instalments still due by month, money never paid, and every late payment listed).
+Two pages on the Semantic layer, the star schema: **Daily cash** (cash in by day, payment method and region, with payments confirmed and the late rate for any date range) and **Due and late** (instalments still due by month, money never paid, and every late payment listed).
 
 The report is built step by step from [`powerbi/`](powerbi/): every Power Query step, the model, every DAX measure, each visual with its fields, the theme, and the numbers each card must show.
 
@@ -85,15 +85,17 @@ Every table, the tables it is built from, and its row count after one run:
 
 ![Data flow, table by table](docs/data-flow.svg)
 
-The star schema the report reads:
+The Semantic layer, the star schema the report reads:
 
 ![The star schema](docs/data-model.svg)
 
-- **Load** ([`sql/1_load.sql`](sql/1_load.sql), [`load.py`](load.py)): the five input files in [`data/input/`](data/input/README.md) (orders, payments, customers, and the payment-method and region mapping files) are checked for their columns, then go into `raw` tables as they are, with `COPY`. Every client value (names, currency, the late threshold, colours, file names) comes from [`config/client.yaml`](config/client.yaml) through [`config.py`](config.py).
-- **Rules** ([`sql/2_rules.sql`](sql/2_rules.sql)): one row per instalment, with its cash date, amount, status (Received, Due or Never paid) and late flag.
-- **Model** ([`sql/3_model.sql`](sql/3_model.sql)): a star schema around `mart.fact_instalment` (296,425 rows) with `dim_date` (every day from the first order to the last instalment), `dim_payment_method` and `dim_state` (state and region). The keys are the natural codes, enforced with primary and foreign keys, so a fact row that points at a missing day, method or state fails the load.
-- **Check:** `load.py` ends by proving that the model holds all 103,886 source payments and that received + still due + never paid equals the source total to the cent; it stops with an error if not.
-- **Numbers:** [`analysis/analysis.ipynb`](analysis/analysis.ipynb) reads the model with pandas, re-reads the raw payments file without the database for an independent total, and draws the charts.
+- **Bronze layer** ([`load.py`](load.py)): the five input files in [`data/input/`](data/input/README.md) (orders, payments, customers, and the payment-method and region mapping files) are checked for their columns, then go into schema `bronze` as text, exactly as written, with the file, the row number, the run id and the load time. A row with an empty required value or a value that would not convert goes to `bronze.quarantine` with the reason (0 rows in this data); a missing file or column, an empty file or a key that appears twice stops the load. Every load is logged in `ops.load_log`. Every client value (names, currency, the late threshold, the calendar, colours, file names) comes from [`config/client.yaml`](config/client.yaml) through [`config.py`](config.py).
+- **Silver layer** ([`sql/2_silver.sql`](sql/2_silver.sql)): the same rows typed and keyed; `load.py` stops if a Silver table holds fewer rows than its Bronze table.
+- **Gold layer** ([`sql/3_gold.sql`](sql/3_gold.sql)): the cash rules, `gold.instalment`: one row per instalment, with its cash date, amount, status (Received, Due or Never paid) and late flag.
+- **Semantic layer** ([`sql/4_semantic.sql`](sql/4_semantic.sql)): the star schema, `semantic.fact_instalment` (296,425 rows) from Gold, with `dim_date` (every day of the fixed range `calendar.start` to `calendar.end` in `config/client.yaml`, 2016 to 2020), `dim_payment_method` and `dim_state` (state and region) from Silver. No dimension is built from the fact. The keys are the natural codes, enforced with primary and foreign keys, so a fact row that points at a missing day, method or state fails the load.
+- **Analytical layer** ([`sql/5_analytical.sql`](sql/5_analytical.sql)): three views over the Semantic layer, cash by payment method, by region and by month, that the notebook and [`powerbi/06-checks.md`](powerbi/06-checks.md) read.
+- **Reporting layer**: [`analysis/analysis.ipynb`](analysis/analysis.ipynb) reads the Semantic and Analytical layers with pandas, re-reads the payments file without the database for an independent total, and draws the charts; the Power BI report in [`powerbi/`](powerbi/) imports the four Semantic tables.
+- **Check:** `load.py` ends by proving that the Semantic layer holds all 103,886 payments loaded into Bronze and that received + still due + never paid equals their total to the cent; it stops with an error if not. The whole run is one transaction, so a failed run changes nothing.
 
 ## ▶️ Run it
 
@@ -112,7 +114,7 @@ python theme.py
 python -m nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
 ```
 
-`load.py` rebuilds everything from scratch each time and ends with `check passed`. The database listens on port 5434 (database and user `cash`; the password is in `.env`). `theme.py` writes the Power BI theme from the colours in `config/client.yaml`.
+`load.py` rebuilds every layer from scratch each time and ends with `check passed`. The database listens on port 5434 (database and user `cash`; the password is in `.env`). `theme.py` writes the Power BI theme from the colours in `config/client.yaml`.
 
 ## ⚠️ Limits
 

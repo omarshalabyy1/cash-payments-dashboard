@@ -1,7 +1,7 @@
 # Input files
 
 The five files the client supplies, as CSV with a header row, UTF-8. The file names are set in `config/client.yaml` under `inputs`.
-Extra columns are ignored. `python load.py` stops with a one-line message if a file is missing or a required column is not there.
+Extra columns are ignored and only the columns below are loaded, into the Bronze layer as text. Before the database is touched, `python load.py` stops with a one-line message if a file is missing, a required column is not there or a file has no rows. While loading, a key that appears twice also stops it, and a row with an empty value (only `order_approved_at` may be empty) or a value that is not a valid whole number, decimal or timestamp (`TYPES` in `load.py`) goes to `bronze.quarantine` with the reason instead of its Bronze table.
 
 ## orders (`inputs.orders`)
 

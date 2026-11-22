@@ -25,7 +25,7 @@ The owner learns how much cash came in only at month end, from a spreadsheet nob
 A small warehouse in PostgreSQL, built in six layers from left to right, that turns every order and payment into one row per instalment, with the cash rules written once in SQL, and a Power BI report on top of it: a daily cash page and a due-and-late page. One command loads it and proves that every total still matches the source. Each layer reads only the layer before it, so a number can be traced back to the file and row it came from.
 
 <p align="center">
-  <img width="100%" src="docs/architecture.drawio.svg" alt="High level architecture: the five client CSV files in data/input/ go into a PostgreSQL warehouse of five layers. Bronze, 6 tables built by load.py: the files as text with their lineage, refused rows to bronze.quarantine. Silver, 5 typed and keyed tables. Gold, 1 table with one row per instalment, its cash date, amount, status and late flag. Semantic, the star schema of 1 fact and 3 dimensions. Analytical, 3 views of totals by method, region and month. Power BI reads the 4 semantic tables on two pages, Daily cash and Due and late; the analysis notebook reads 6 tables and views. Python runs it all in one transaction.">
+  <img width="100%" src="docs/architecture.drawio.svg" alt="High level architecture: 5 CSV files in data/input/, load.py in Python, PostgreSQL 17 with the Bronze, Silver, Gold, Semantic and Analytical layers, then Power BI with the 4 Semantic tables and a 2-page report; the notebook reads PostgreSQL and draws 3 charts.">
 </p>
 
 ### 🔁 The mental model: where the money goes
@@ -81,9 +81,9 @@ The report is built step by step from [`powerbi/`](powerbi/): every Power Query 
 
 ## 🏗️ How it is built
 
-Every table and the tables it is built from, one line per read in the code:
+The steps in the order `load.py` runs them, then the report:
 
-![Data flow, table by table: 5 CSV files into 6 Bronze tables (including bronze.quarantine), 5 Silver tables, gold.instalment, 4 Semantic tables and 3 Analytical views, read by the Power BI report and the analysis notebook; 37 lines](docs/data-flow.drawio.svg)
+![Data flow in 7 steps: Bronze (load.py), Silver, Gold, Semantic star schema with 296,425 instalment rows, Analytical views, the check that all 103,886 payments match the source to the cent, and the report](docs/data-flow.drawio.svg)
 
 The Semantic layer, the star schema the report reads:
 

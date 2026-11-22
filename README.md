@@ -25,7 +25,7 @@ The owner learns how much cash came in only at month end, from a spreadsheet nob
 A small warehouse in PostgreSQL, built in six layers from left to right, that turns every order and payment into one row per instalment, with the cash rules written once in SQL, and a Power BI report on top of it: a daily cash page and a due-and-late page. One command loads it and proves that every total still matches the source. Each layer reads only the layer before it, so a number can be traced back to the file and row it came from.
 
 <p align="center">
-  <img width="100%" src="docs/how-it-works.svg" alt="How it works, in six layers: 1 Bronze, the input files as text with their file and row, refused rows to bronze.quarantine; 2 Silver, typed and keyed; 3 Gold, the cash rules: cash in, still due, late and never paid defined once; 4 Semantic, the star schema with a date table; 5 Analytical, totals by method, region and month; 6 Reporting, the notebook and the Power BI pages.">
+  <img width="100%" src="docs/architecture.drawio.svg" alt="High level architecture: the five client CSV files in data/input/ go into a PostgreSQL warehouse of five layers. Bronze, 6 tables built by load.py: the files as text with their lineage, refused rows to bronze.quarantine. Silver, 5 typed and keyed tables. Gold, 1 table with one row per instalment, its cash date, amount, status and late flag. Semantic, the star schema of 1 fact and 3 dimensions. Analytical, 3 views of totals by method, region and month. Power BI reads the 4 semantic tables on two pages, Daily cash and Due and late; the analysis notebook reads 6 tables and views. Python runs it all in one transaction.">
 </p>
 
 ### 🔁 The mental model: where the money goes
@@ -81,13 +81,13 @@ The report is built step by step from [`powerbi/`](powerbi/): every Power Query 
 
 ## 🏗️ How it is built
 
-Every table, the tables it is built from, and its row count after one run:
+Every table and the tables it is built from, one line per read in the code:
 
-![Data flow, table by table](docs/data-flow.svg)
+![Data flow, table by table: 5 CSV files into 6 Bronze tables (including bronze.quarantine), 5 Silver tables, gold.instalment, 4 Semantic tables and 3 Analytical views, read by the Power BI report and the analysis notebook; 37 lines](docs/data-flow.drawio.svg)
 
 The Semantic layer, the star schema the report reads:
 
-![The star schema](docs/data-model.svg)
+![The star schema: fact_instalment in the middle with dim_date (twice: order date and cash date), dim_payment_method and dim_state, every column with its type and PK/FK marks, 4 foreign keys](docs/star-schema.drawio.svg)
 
 - **Bronze layer** ([`load.py`](load.py)): the five input files in [`data/input/`](data/input/README.md) (orders, payments, customers, and the payment-method and region mapping files) are checked for their columns, then go into schema `bronze` as text, exactly as written, with the file, the row number, the run id and the load time. A row with an empty required value or a value that would not convert goes to `bronze.quarantine` with the reason (0 rows in this data); a missing file or column, an empty file or a key that appears twice stops the load. Every load is logged in `ops.load_log`. Every client value (names, currency, the late threshold, the calendar, colours, file names) comes from [`config/client.yaml`](config/client.yaml) through [`config.py`](config.py).
 - **Silver layer** ([`sql/2_silver.sql`](sql/2_silver.sql)): the same rows typed and keyed; `load.py` stops if a Silver table holds fewer rows than its Bronze table.
